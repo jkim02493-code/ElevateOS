@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1E293B">
@@ -64,22 +64,69 @@
   #auth-screen {
     position: fixed; inset: 0; z-index: 1000;
     display: flex; align-items: center; justify-content: center;
-    background: var(--cream); overflow: auto;
+    background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(223,91,48,.12), transparent 60%),
+      radial-gradient(1000px 500px at 90% 90%, rgba(59,130,246,.14), transparent 58%),
+      linear-gradient(135deg, #F5F1E6 0%, #EEF2F8 45%, #F8F9FA 100%);
+    overflow: auto;
   }
-  .auth-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); }
+  #auth-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 45%);
+    pointer-events: none;
+  }
+  #auth-screen::after {
+    content: '';
+    position: absolute;
+    width: 720px;
+    height: 720px;
+    right: -220px;
+    top: -260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(30,41,59,.08) 0%, rgba(30,41,59,0) 72%);
+    pointer-events: none;
+  }
+  .auth-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); animation: authFloat 8s ease-in-out infinite; }
   .auth-orb-1 { width: 520px; height: 520px; top: -140px; right: -100px; background: radial-gradient(circle, rgba(59,130,246,.3) 0%, transparent 70%); }
-  .auth-orb-2 { width: 340px; height: 340px; bottom: -80px; left: -80px; background: radial-gradient(circle, rgba(59,130,246,.15) 0%, transparent 70%); }
+  .auth-orb-2 { width: 340px; height: 340px; bottom: -80px; left: -80px; background: radial-gradient(circle, rgba(223,91,48,.2) 0%, transparent 70%); animation-delay: -3s; }
   .auth-card {
     position: relative; z-index: 1;
-    background: var(--glass);
+    background: linear-gradient(165deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.8) 100%);
     backdrop-filter: blur(24px) saturate(1.4);
     -webkit-backdrop-filter: blur(24px) saturate(1.4);
-    border: 1px solid var(--cream-mid);
+    border: 1px solid rgba(255,255,255,.75);
     border-radius: 24px; padding: 48px 44px; width: 420px;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 24px 56px rgba(30,41,59,.16), 0 2px 10px rgba(30,41,59,.08);
+  }
+  .auth-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,.7);
+    pointer-events: none;
+  }
+  .auth-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 0 0 18px;
+  }
+  .auth-chip {
+    background: rgba(255,255,255,.68);
+    border: 1px solid rgba(203,213,225,.8);
+    border-radius: 10px;
+    padding: 7px 8px;
+    text-align: center;
+    color: var(--ink-mid);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .2px;
   }
   .auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 34px; }
-  .auth-logo-mark { width: 36px; height: 36px; border-radius: 9px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', serif; font-size: 18px; color: white; }
+  .auth-logo-mark { width: 36px; height: 36px; border-radius: 9px; background: linear-gradient(160deg, #DF5B30 0%, #F59E0B 100%); display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', serif; font-size: 18px; color: white; box-shadow: 0 8px 18px rgba(223,91,48,.35); }
   .auth-logo-name { font-family: 'Instrument Serif', serif; font-size: 20px; color: var(--navy); letter-spacing: -.4px; }
   .auth-headline { font-family: 'Instrument Serif', serif; font-size: 30px; color: var(--navy); font-weight: 400; letter-spacing: -.5px; line-height: 1.15; margin-bottom: 6px; }
   .auth-sub { color: var(--ink-soft); font-size: 13px; margin-bottom: 30px; }
@@ -99,6 +146,10 @@
   .demo-btns { display: flex; gap: 7px; }
   .demo-btn { flex: 1; padding: 9px; background: var(--navy-light); border: 1.5px solid var(--navy); border-radius: 8px; color: var(--cream); font-size: 12.5px; font-weight: 500; font-family: 'Geist', sans-serif; cursor: pointer; transition: all .15s; text-align: center; }
   .demo-btn:hover { background: var(--blue); border-color: var(--blue); color: white; }
+  @keyframes authFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(18px); }
+  }
 
   /* APP SHELL */
   #app { display: none; height: 100vh; }
@@ -149,13 +200,15 @@
   .notif-dot { position: absolute; top: 5px; right: 5px; width: 6px; height: 6px; border-radius: 50%; background: var(--orange); border: 1.5px solid var(--cream-dark); }
 
   /* CONTENT */
-  .content-area { flex: 1; display: flex; overflow: hidden; background: var(--cream); }
-  .center-panel { flex: 1; overflow-y: auto; padding: 24px; }
-  .right-panel { width: var(--right-w); background: var(--cream-dark); border-left: 1px solid var(--cream-mid); overflow-y: auto; flex-shrink: 0; padding: 20px; }
+  .content-area { flex: 1; display: flex; overflow: hidden; background: var(--cream); color: var(--ink); }
+  .center-panel { flex: 1; overflow-y: auto; padding: 24px; color: var(--ink); }
+  .right-panel { width: var(--right-w); background: var(--cream-dark); border-left: 1px solid var(--cream-mid); overflow-y: auto; flex-shrink: 0; padding: 20px; color: var(--ink); }
   .right-panel.hidden { display: none; }
+  .content-area table th,
+  .content-area table td { color: var(--ink); }
 
   /* CARDS */
-  .card { background: var(--white); border: 1px solid var(--cream-mid); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .card { background: var(--white); border: 1px solid var(--cream-mid); border-radius: var(--radius); box-shadow: var(--shadow); color: var(--ink); }
   .card-hd { padding: 15px 18px; border-bottom: 1px solid var(--cream-mid); display: flex; align-items: center; justify-content: space-between; }
   .card-title { font-size: 14px; font-weight: 600; color: var(--navy); }
   .card-sub { font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
@@ -314,7 +367,7 @@
   /* MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(28,26,24,.38); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--white); border-radius: 18px; padding: 26px 28px; width: 500px; max-width: 92vw; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); border: 1px solid var(--cream-mid); }
+  .modal { background: var(--white); border-radius: 18px; padding: 26px 28px; width: 500px; max-width: 92vw; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); border: 1px solid var(--cream-mid); color: var(--ink); }
   .modal-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
   .modal-title { font-family: 'Instrument Serif', serif; font-size: 19px; color: var(--ink); letter-spacing: -.3px; }
   .modal-close { width: 28px; height: 28px; border-radius: 6px; background: var(--cream); border: none; cursor: pointer; color: var(--ink-soft); font-size: 15px; display: flex; align-items: center; justify-content: center; }
@@ -366,6 +419,8 @@
     .topbar { padding: 0 12px; }
     .stat-card { padding: 10px; }
     .btn { padding: 8px 14px; font-size: 13px; }
+    .auth-card { width: calc(100vw - 28px); padding: 30px 20px; }
+    .auth-metrics { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -382,31 +437,39 @@
     </div>
     <div class="auth-headline">Welcome<br><em>back.</em></div>
     <div class="auth-sub">The operating system for tutoring ecosystems.</div>
+    <div class="auth-metrics">
+      <div class="auth-chip">Secure Login</div>
+      <div class="auth-chip">Tutor + Parent</div>
+      <div class="auth-chip">Live Messaging</div>
+    </div>
     <div class="auth-tabs">
       <div class="auth-tab active" onclick="switchTab('in')">Sign In</div>
       <div class="auth-tab" onclick="switchTab('up')">Sign Up</div>
     </div>
     <div id="tab-in">
       <label class="a-label">Email</label>
-      <input class="a-input" type="email" value="james.chen@school.edu" placeholder="you@school.edu">
+      <input class="a-input" id="signin-email" type="email" value="tutor@test.com" placeholder="you@school.edu">
       <label class="a-label">Password</label>
-      <input class="a-input" type="password" value="password" placeholder="••••••••">
-      <button class="btn-auth" onclick="login('tutor')">Continue</button>
+      <input class="a-input" id="signin-password" type="password" value="1234" placeholder="••••••••">
+      <button class="btn-auth" onclick="handleSignIn()">Continue</button>
+      <div style="margin-top:8px;font-size:11px;color:var(--ink-faint)">Demo login: <code>tutor@test.com</code> / <code>1234</code> or <code>parent@test.com</code> / <code>1234</code></div>
     </div>
     <div id="tab-up" style="display:none">
       <label class="a-label">Full Name</label>
-      <input class="a-input" placeholder="Your name">
+      <input class="a-input" id="signup-name" placeholder="Your name">
       <label class="a-label">Email</label>
-      <input class="a-input" type="email" placeholder="you@school.edu">
+      <input class="a-input" id="signup-email" type="email" placeholder="you@school.edu">
+      <label class="a-label">Password</label>
+      <input class="a-input" id="signup-password" type="password" placeholder="Create password">
       <label class="a-label">Role</label>
-      <select class="a-select"><option>Tutor</option><option>Parent</option></select>
-      <button class="btn-auth">Create Account</button>
+      <select class="a-select" id="signup-role"><option>Tutor</option><option>Parent</option></select>
+      <button class="btn-auth" onclick="handleSignup()">Create Account</button>
     </div>
     <div class="auth-demo">
       <p>Try a demo account</p>
       <div class="demo-btns">
-        <div class="demo-btn" onclick="login('tutor')">Tutor View</div>
-        <div class="demo-btn" onclick="login('parent')">Parent View</div>
+        <div class="demo-btn" onclick="quickLogin('tutor')">Tutor View</div>
+        <div class="demo-btn" onclick="quickLogin('parent')">Parent View</div>
       </div>
     </div>
   </div>
@@ -418,7 +481,8 @@
     <div class="sb-logo"><div class="sb-logo-mark">E</div><span class="sb-logo-name">ElevateOS</span></div>
     <div class="sb-user" id="sb-user"></div>
     <nav class="sb-nav" id="sb-nav"></nav>
-    <div class="sb-bottom">
+    <div class="sb-bottom" id="sb-bottom">
+      <div id="role-switcher"></div>
       <div class="sb-item logout" onclick="logout()">
         <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         <span>Sign Out</span>
@@ -443,7 +507,7 @@
         <div class="tb-btn" onclick="showModal('recap-modal')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
-        <div class="tb-btn">
+        <div class="tb-btn" onclick="showNotifications()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <div class="notif-dot"></div>
         </div>
@@ -465,7 +529,8 @@
     </div>
     <div class="mobile-menu-user" id="mobile-menu-user"></div>
     <nav class="mobile-menu-nav" id="mobile-menu-nav"></nav>
-    <div class="mobile-menu-bottom">
+    <div class="mobile-menu-bottom" id="mobile-menu-bottom">
+      <div id="mobile-role-switcher"></div>
       <div class="sb-item logout" onclick="logout()">
         <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         <span>Sign Out</span>
@@ -508,33 +573,74 @@
 <script>
 const D = {
   user: null, nav: 'dashboard', selConv: 1, profileTab: 'overview', selStudent: null,
+  users: [
+    { id: 201, email: 'tutor@test.com', password: '1234', role: 'Tutor', name: 'James Chen', ini: 'JC', hue: '#3B82F6' },
+    { id: 101, email: 'parent@test.com', password: '1234', role: 'Parent', name: 'Mrs. Tanaka', ini: 'MT', hue: '#9C6B3C' },
+  ],
+  ui: {
+    activePage: 'dashboard',
+    activeConversationId: null,
+    studentSearch: '',
+    studentSort: 'name',
+    studentFilter: 'all',
+    phaseFilter: 'all',
+    currentWeekOffset: 0,
+  },
   students: [
-    { id:1, name:'Yuki Tanaka',    ini:'YT', hue:'#DF5B30', subject:'Mathematics', grade:'Grade 10', tutor:'James Chen', sessions:24, next:'Mon 4:00 PM',  rating:4.2, progress:78 },
-    { id:2, name:'Ryo Nakamura',   ini:'RN', hue:'#9C6B3C', subject:'English',     grade:'Grade 11', tutor:'James Chen', sessions:18, next:'Wed 5:30 PM',  rating:3.9, progress:65 },
-    { id:3, name:'Aiko Sato',      ini:'AS', hue:'#5C7A5A', subject:'Physics',     grade:'Grade 12', tutor:'James Chen', sessions:31, next:'Thu 3:00 PM',  rating:4.7, progress:90 },
-    { id:4, name:'Kenji Yamamoto', ini:'KY', hue:'#7B6E50', subject:'Chemistry',   grade:'Grade 10', tutor:'James Chen', sessions:12, next:'Fri 2:00 PM',  rating:3.5, progress:55 },
-    { id:5, name:'Hana Kobayashi', ini:'HK', hue:'#B36B3A', subject:'Biology',     grade:'Grade 11', tutor:'James Chen', sessions:9,  next:'Mon 6:00 PM',  rating:4.0, progress:70 },
+    { id:1, name:'Yuki Tanaka',      ini:'YT', hue:'#DF5B30', subject:'Mathematics',         grade:'Grade 10', tutor:'James Chen', tutorId:201, parentId:101, sessions:24, next:'Mon 4:00 PM',  rating:4.3, progress:82 },
+    { id:2, name:'Ryo Nakamura',     ini:'RN', hue:'#9C6B3C', subject:'English',             grade:'Grade 11', tutor:'James Chen', tutorId:201, parentId:102, sessions:18, next:'Wed 5:30 PM',  rating:3.1, progress:59 },
+    { id:3, name:'Aiko Sato',        ini:'AS', hue:'#5C7A5A', subject:'Physics',             grade:'Grade 12', tutor:'James Chen', tutorId:201, parentId:103, sessions:31, next:'Thu 3:00 PM',  rating:4.8, progress:93 },
+    { id:4, name:'Kenji Yamamoto',   ini:'KY', hue:'#7B6E50', subject:'Chemistry',           grade:'Grade 10', tutor:'James Chen', tutorId:201, parentId:104, sessions:12, next:'Fri 2:00 PM',  rating:2.8, progress:48 },
+    { id:5, name:'Hana Kobayashi',   ini:'HK', hue:'#B36B3A', subject:'Biology',             grade:'Grade 11', tutor:'James Chen', tutorId:201, parentId:105, sessions:9,  next:'Mon 6:00 PM',  rating:3.9, progress:68 },
+    { id:6, name:'Mina Park',        ini:'MP', hue:'#4F46E5', subject:'Algebra II',          grade:'Grade 9',  tutor:'James Chen', tutorId:201, parentId:106, sessions:14, next:'Tue 4:30 PM',  rating:4.4, progress:76 },
+    { id:7, name:'Omar Hassan',      ini:'OH', hue:'#0EA5E9', subject:'World History',       grade:'Grade 10', tutor:'James Chen', tutorId:201, parentId:107, sessions:11, next:'Thu 5:00 PM',  rating:3.2, progress:61 },
+    { id:8, name:'Lucia Martinez',   ini:'LM', hue:'#D946EF', subject:'Essay Writing',       grade:'Grade 11', tutor:'James Chen', tutorId:201, parentId:108, sessions:16, next:'Sat 10:00 AM', rating:2.9, progress:52 },
+    { id:9, name:'Noah Williams',    ini:'NW', hue:'#16A34A', subject:'Pre-Calculus',        grade:'Grade 12', tutor:'James Chen', tutorId:201, parentId:109, sessions:20, next:'Sun 3:00 PM',  rating:4.1, progress:74 },
   ],
   sessions: [
-    { id:1, studentId:1, date:'2024-03-10', completed:true },
-    { id:2, studentId:2, date:'2024-03-08', completed:false },
-    { id:3, studentId:3, date:'2024-03-12', completed:true },
-    { id:4, studentId:1, date:'2024-03-03', completed:true },
-    { id:5, studentId:4, date:'2024-03-09', completed:false },
-    { id:6, studentId:5, date:'2024-03-15', completed:false },
+    { id:1,  studentId:1, date:'2026-03-24', completed:true },
+    { id:2,  studentId:2, date:'2026-03-24', completed:false },
+    { id:3,  studentId:3, date:'2026-03-25', completed:true },
+    { id:4,  studentId:4, date:'2026-03-25', completed:false },
+    { id:5,  studentId:5, date:'2026-03-26', completed:true },
+    { id:6,  studentId:6, date:'2026-03-26', completed:true },
+    { id:7,  studentId:7, date:'2026-03-27', completed:false },
+    { id:8,  studentId:8, date:'2026-03-27', completed:false },
+    { id:9,  studentId:9, date:'2026-03-28', completed:true },
+    { id:10, studentId:1, date:'2026-03-31', completed:false },
+    { id:11, studentId:6, date:'2026-03-31', completed:false },
+    { id:12, studentId:3, date:'2026-04-01', completed:false },
   ],
   recaps: [
-    { id:1, sid:1, day:'10', mon:'MAR', topics:'Quadratic equations, completing the square', rating:4, hw:'Exercises 7.3–7.5, 10 problems', next:'Complex numbers', notes:'Great focus. Strong improvement on factoring.' },
-    { id:2, sid:2, day:'8',  mon:'MAR', topics:'Essay structure, thesis statements',          rating:3, hw:'Draft intro paragraph for assigned essay', next:'Body paragraph development', notes:'Needs more practice with argumentative writing.' },
-    { id:3, sid:3, day:'12', mon:'MAR', topics:"Electromagnetism, Faraday's law",             rating:5, hw:'Problem set 9, Q1–6', next:"Maxwell's equations", notes:'Exceptional. Performing above grade level.' },
-    { id:4, sid:1, day:'3',  mon:'MAR', topics:'Functions and graphs',                        rating:4, hw:'Graph 5 functions worksheet', next:'Quadratic equations', notes:'Good progress on function notation.' },
-    { id:5, sid:4, day:'9',  mon:'MAR', topics:'Periodic table, atomic structure',            rating:3, hw:'Memorise first 20 elements', next:'Chemical bonding', notes:'Needs work on memorisation strategies.' },
+    { id:1,  sid:1, day:'31', mon:'MAR', topics:'Quadratic functions and vertex transformations', rating:5, hw:'Workbook 8B #1-12', next:'Systems of quadratic equations', notes:'Improving strongly. Solution: weekly timed drills + error-log review every Friday.' },
+    { id:2,  sid:2, day:'30', mon:'MAR', topics:'Claim-evidence reasoning and paragraph cohesion', rating:2, hw:'Rewrite body paragraph using CER framework', next:'Counterargument structure', notes:'Struggling with clarity. Solution: sentence-frame scaffolds and 15-min daily writing sprint.' },
+    { id:3,  sid:3, day:'30', mon:'MAR', topics:'Electromagnetic induction and Lenz law', rating:5, hw:'Problem set 11 Q1-8', next:'Energy conservation in fields', notes:'Excellent upward trend. Solution: extend into challenge problems for enrichment.' },
+    { id:4,  sid:4, day:'29', mon:'MAR', topics:'Mole conversions and stoichiometry', rating:2, hw:'Stoichiometry worksheet set A', next:'Limiting reactants', notes:'Needs intervention. Solution: visual ratio table + guided practice with immediate feedback.' },
+    { id:5,  sid:5, day:'29', mon:'MAR', topics:'Cell transport and osmosis', rating:3, hw:'Concept map + quiz corrections', next:'Cell signaling pathways', notes:'Stable but flat. Solution: retrieval-practice cards and confidence checks every 10 minutes.' },
+    { id:6,  sid:6, day:'28', mon:'MAR', topics:'Linear inequalities and interval notation', rating:4, hw:'Practice sheet L2 #1-20', next:'Absolute value inequalities', notes:'Consistent gains. Solution: move to mixed-difficulty sets twice weekly.' },
+    { id:7,  sid:7, day:'28', mon:'MAR', topics:'Industrial Revolution causes and effects', rating:3, hw:'Two-source comparison chart', next:'Imperialism case study', notes:'Stagnant pace. Solution: reading annotation template + oral summary checks.' },
+    { id:8,  sid:8, day:'27', mon:'MAR', topics:'Thesis precision and argument flow', rating:2, hw:'Thesis revision + 2 intro drafts', next:'Evidence integration', notes:'Struggling with structure. Solution: paragraph blueprint and live co-writing for first draft.' },
+    { id:9,  sid:9, day:'27', mon:'MAR', topics:'Rational functions and asymptotes', rating:4, hw:'Graph analysis sheet R4', next:'Polynomial division review', notes:'Steady performance. Solution: targeted challenge set for asymptote interpretation.' },
+    { id:10, sid:1, day:'24', mon:'MAR', topics:'Factoring review and graphing', rating:4, hw:'Graph 6 functions worksheet', next:'Quadratic transformations', notes:'Good baseline. Solution: continue spaced practice.' },
+    { id:11, sid:2, day:'23', mon:'MAR', topics:'Paragraph unity and transition words', rating:3, hw:'Transition bank practice', next:'Evidence commentary depth', notes:'Mixed progress. Solution: exemplar comparison checklist.' },
+    { id:12, sid:3, day:'22', mon:'MAR', topics:'Faraday law conceptual review', rating:4, hw:'Past paper section B', next:'Lenz law applications', notes:'Strong consistency. Solution: increase conceptual challenge.' },
+    { id:13, sid:4, day:'22', mon:'MAR', topics:'Atomic structure revision', rating:3, hw:'Atomic model quick quiz', next:'Periodic trends', notes:'Some gains. Solution: reinforce vocabulary and formula recall.' },
+    { id:14, sid:5, day:'21', mon:'MAR', topics:'DNA replication basics', rating:3, hw:'Diagram labeling set', next:'Protein synthesis', notes:'Stable. Solution: pair concept checks with mini-quizzes.' },
+    { id:15, sid:6, day:'21', mon:'MAR', topics:'Equation balancing warmup', rating:3, hw:'Inequality starter pack', next:'Systems of inequalities', notes:'Early growth. Solution: short daily warmups.' },
+    { id:16, sid:7, day:'20', mon:'MAR', topics:'French Revolution timeline', rating:3, hw:'Timeline correction exercise', next:'Primary source analysis', notes:'Flat trajectory. Solution: memory anchors and timeline chunking.' },
+    { id:17, sid:8, day:'20', mon:'MAR', topics:'Intro paragraph fundamentals', rating:3, hw:'Intro rewrite #1', next:'Topic sentence precision', notes:'Needs consistency. Solution: scaffolded paragraph template.' },
+    { id:18, sid:9, day:'19', mon:'MAR', topics:'Function transformations review', rating:4, hw:'Transformation set C', next:'Rational function synthesis', notes:'Solid base. Solution: add timed mixed set once per week.' },
   ],
   convs: [
-    { id:1, sid:1, with:'Tanaka Family',   unread:2, last:'Thank you for the detailed recap!', time:'2h ago' },
-    { id:2, sid:2, with:'Nakamura Family', unread:0, last:'Can we reschedule Friday?',         time:'Yesterday' },
-    { id:3, sid:3, with:'Sato Family',     unread:1, last:'Aiko is really excited!',           time:'3d ago' },
-    { id:4, sid:4, with:'Yamamoto Family', unread:0, last:'Homework submitted.',               time:'1w ago' },
+    { id:1, sid:1, with:'Tanaka Family',    unread:2, last:'Thank you for the detailed recap!', time:'2h ago' },
+    { id:2, sid:2, with:'Nakamura Family',  unread:1, last:'Can we add extra writing practice?', time:'Yesterday' },
+    { id:3, sid:3, with:'Sato Family',      unread:1, last:'Aiko is really excited!',            time:'3d ago' },
+    { id:4, sid:4, with:'Yamamoto Family',  unread:0, last:'Homework submitted.',                time:'1w ago' },
+    { id:5, sid:5, with:'Kobayashi Family', unread:0, last:'Thanks for the biology notes.',      time:'5d ago' },
+    { id:6, sid:6, with:'Park Family',      unread:1, last:'Mina felt more confident today.',    time:'4h ago' },
+    { id:7, sid:7, with:'Hassan Family',    unread:0, last:'Can we focus on source analysis?',   time:'2d ago' },
+    { id:8, sid:8, with:'Martinez Family',  unread:1, last:'Lucia needs help with essay format.',time:'6h ago' },
+    { id:9, sid:9, with:'Williams Family',  unread:0, last:'Pre-calc quiz improved this week.',  time:'1d ago' },
   ],
   msgs: {
     1: [
@@ -559,39 +665,434 @@ const D = {
       { id:2, from:'parent', text:'Homework submitted — Kenji worked hard on it!', time:'Sun 8:00 PM' },
     ],
   },
-  schedule: [
-    { day:0, name:'Yuki T.',  time:'4:00 PM', cls:'ev-orange' },
-    { day:0, name:'Hana K.',  time:'6:00 PM', cls:'ev-sand' },
-    { day:2, name:'Ryo N.',   time:'5:30 PM', cls:'ev-sand' },
-    { day:3, name:'Aiko S.',  time:'3:00 PM', cls:'ev-green' },
-    { day:4, name:'Kenji Y.', time:'2:00 PM', cls:'ev-orange' },
-  ],
   schedReqs: [
     { student:'Ryo Nakamura',   from:'Fri Mar 14', to:'Sat Mar 15, 10 AM', status:'pending',  reason:'School event' },
     { student:'Hana Kobayashi', from:'Mon Mar 17', to:'Tue Mar 18, 6 PM',  status:'approved', reason:'Doctor appointment' },
   ],
 };
+const FORCE_LOGIN_ON_LOAD = true;
+
+function bootstrapDataModel() {
+  D.students.forEach(s => {
+    s.userId = s.parentId;
+  });
+  D.sessions = D.sessions.map((s, index) => {
+    const student = D.students.find(st => st.id === s.studentId);
+    const fallbackDates = ['2025-04-07','2025-04-08','2025-04-09','2025-04-10','2025-04-11','2025-04-14','2025-04-15','2025-04-16'];
+    return {
+      id: s.id || Date.now() + index,
+      studentId: s.studentId,
+      tutorId: student?.tutorId || 201,
+      date: s.date && /^20\d{2}-\d{2}-\d{2}$/.test(s.date) ? s.date : fallbackDates[index % fallbackDates.length],
+      time: s.time || (['16:00','17:30','15:00','14:00','18:00'][index % 5]),
+      status: s.status || (s.completed ? 'completed' : 'scheduled'),
+      completed: !!s.completed
+    };
+  });
+
+  D.conversations = D.convs.map(c => {
+    const student = D.students.find(s => s.id === c.sid);
+    return {
+      id: c.id,
+      studentId: c.sid,
+      parentId: student?.parentId || 101,
+      with: c.with,
+      last: c.last,
+      time: c.time
+    };
+  });
+
+  D.messages = [];
+  Object.entries(D.msgs).forEach(([cid, list]) => {
+    const conversationId = Number(cid);
+    const conv = D.conversations.find(c => c.id === conversationId);
+    const tutorId = D.students.find(s => s.id === conv?.studentId)?.tutorId || 201;
+    const parentId = conv?.parentId || 101;
+    list.forEach((m, idx) => {
+      const isTutorSender = m.from === 'tutor';
+      D.messages.push({
+        id: m.id || Number(`${conversationId}${idx + 1}`),
+        conversationId,
+        senderId: isTutorSender ? tutorId : parentId,
+        type: m.struct ? (m.type || 'recap') : 'text',
+        content: m.struct ? (m.body || '') : (m.text || ''),
+        createdAt: new Date(Date.now() - (list.length - idx) * 3600000).toISOString(),
+        read: false
+      });
+    });
+  });
+
+  // Demo-day density: make each conversation feel active.
+  D.conversations.forEach(conv => {
+    const existing = D.messages.filter(m => m.conversationId === conv.id);
+    const student = D.students.find(s => s.id === conv.studentId);
+    const tutorId = student?.tutorId || 201;
+    const parentId = conv.parentId;
+    const needed = Math.max(0, 20 - existing.length);
+    for (let i = 0; i < needed; i += 1) {
+      const fromTutor = i % 2 === 0;
+      D.messages.push({
+        id: Date.now() + conv.id * 1000 + i,
+        conversationId: conv.id,
+        senderId: fromTutor ? tutorId : parentId,
+        type: 'text',
+        content: fromTutor ? `Quick update #${i + 1}: reviewed practice set.` : `Thanks, update #${i + 1} received.`,
+        createdAt: new Date(Date.now() - (needed - i) * 1800000).toISOString(),
+        read: false
+      });
+    }
+  });
+}
 
 function switchTab(t) {
   document.querySelectorAll('.auth-tab').forEach((el,i) => el.classList.toggle('active',(t==='in'&&i===0)||(t==='up'&&i===1)));
   document.getElementById('tab-in').style.display = t==='in' ? '' : 'none';
   document.getElementById('tab-up').style.display = t==='up' ? '' : 'none';
+  enhanceKeyboardAccessibility();
 }
-function login(role) {
-  const users = { tutor:{name:'James Chen',role:'Tutor',ini:'JC',hue:'#3B82F6'}, parent:{name:'Mrs. Tanaka',role:'Parent',ini:'MT',hue:'#9C6B3C'} };
-  D.user = users[role];
+function bindAuthInputKeys() {
+  const signInPassword = document.getElementById('signin-password');
+  const signInEmail = document.getElementById('signin-email');
+  const signUpPassword = document.getElementById('signup-password');
+  const signUpEmail = document.getElementById('signup-email');
+  const signUpName = document.getElementById('signup-name');
+  [signInEmail, signInPassword].forEach(input => {
+    if (!input || input.dataset.boundEnter === '1') return;
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSignIn();
+      }
+    });
+    input.dataset.boundEnter = '1';
+  });
+  [signUpName, signUpEmail, signUpPassword].forEach(input => {
+    if (!input || input.dataset.boundEnter === '1') return;
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSignup();
+      }
+    });
+    input.dataset.boundEnter = '1';
+  });
+}
+function login(email, password) {
+  const user = D.users.find(u => u.email.toLowerCase() === String(email).toLowerCase() && u.password === password);
+  if (!user) { showToast('Invalid credentials'); return false; }
+  D.user = { ...user };
+  localStorage.setItem('elevate_user', JSON.stringify(D.user));
+  initApp();
+  return true;
+}
+function quickLogin(role) {
+  const targetRole = role === 'parent' ? 'Parent' : 'Tutor';
+  const user = D.users.find(u => u.role === targetRole);
+  if (!user) return;
+  D.user = { ...user };
+  localStorage.setItem('elevate_user', JSON.stringify(D.user));
+  initApp();
+}
+function handleSignIn() {
+  const email = document.getElementById('signin-email')?.value?.trim();
+  const password = document.getElementById('signin-password')?.value || '';
+  login(email, password);
+}
+function handleSignup() {
+  const name = document.getElementById('signup-name')?.value?.trim();
+  const email = document.getElementById('signup-email')?.value?.trim();
+  const password = document.getElementById('signup-password')?.value || '';
+  const role = document.getElementById('signup-role')?.value === 'Parent' ? 'Parent' : 'Tutor';
+  if (!name || !email || !password) { showToast('Please fill all sign-up fields'); return; }
+  if (D.users.some(u => u.email.toLowerCase() === email.toLowerCase())) { showToast('Email already exists'); return; }
+  const id = Date.now();
+  const ini = name.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase() || 'U';
+  const hue = role === 'Tutor' ? '#3B82F6' : '#9C6B3C';
+  D.users.push({ id, email, password, role, name, ini, hue });
+  localStorage.setItem('elevate_users', JSON.stringify(D.users));
+  login(email, password);
+}
+function initAuth() {
+  if (FORCE_LOGIN_ON_LOAD) {
+    localStorage.removeItem('elevate_user');
+    return;
+  }
+  const savedUsers = localStorage.getItem('elevate_users');
+  if (savedUsers) {
+    try {
+      const parsedUsers = JSON.parse(savedUsers);
+      if (Array.isArray(parsedUsers) && parsedUsers.length) D.users = parsedUsers;
+    } catch (e) {}
+  }
+  const saved = localStorage.getItem('elevate_user');
+  if (!saved) return;
+  try {
+    const parsed = JSON.parse(saved);
+    const matched = D.users.find(u => u.email === parsed.email && u.password === parsed.password);
+    if (matched) D.user = { ...matched };
+  } catch (e) {
+    localStorage.removeItem('elevate_user');
+  }
+}
+function initApp() {
+  if (!D.user) {
+    switchTab('in');
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app').classList.remove('visible');
+    bindAuthInputKeys();
+    return;
+  }
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').classList.add('visible');
-  buildSidebar(); nav('dashboard');
+  D.ui.activePage = D.nav || 'dashboard';
+  attachGlobalHandlers();
+  buildSidebar();
+  nav(D.ui.activePage);
+  updateNotificationDot();
 }
 function logout() {
   D.user = null;
+  localStorage.removeItem('elevate_user');
+  switchTab('in');
   document.getElementById('auth-screen').style.display = 'flex';
   document.getElementById('app').classList.remove('visible');
+  bindAuthInputKeys();
+}
+
+function getVisibleStudents() {
+  if (!D.user) return [];
+  if (D.user.role === 'Tutor') return D.students.filter(s => s.tutorId === D.user.id);
+  return D.students.filter(s => s.parentId === D.user.id);
+}
+
+function getStudentById(id) {
+  const student = D.students.find(s => s.id === id);
+  if (!student || !D.user) return null;
+  if (D.user.role === 'Parent' && student.parentId !== D.user.id) return null;
+  if (D.user.role === 'Tutor' && student.tutorId !== D.user.id) return null;
+  return student;
+}
+
+function canAccessStudent(id) {
+  return !!getStudentById(id);
+}
+
+function getVisibleRecaps() {
+  if (!D.user) return [];
+  const visibleStudentIds = getVisibleStudents().map(s => s.id);
+  return D.recaps.filter(r => visibleStudentIds.includes(r.sid || r.studentId));
+}
+
+function getVisibleConversations() {
+  if (!D.user) return [];
+  if (D.user.role === 'Tutor') return D.conversations.filter(c => getVisibleStudents().some(s => s.id === c.studentId));
+  return D.conversations.filter(c => c.parentId === D.user.id);
+}
+
+function getConversationPartnerName(conv) {
+  const student = D.students.find(s => s.id === conv.studentId);
+  if (!student) return conv.with || 'Conversation';
+  if (D.user?.role === 'Parent') return student.tutor || 'Assigned Tutor';
+  return conv.with || `${student.name.split(' ')[0]} Family`;
+}
+
+function getStudentSessions(studentId) {
+  return D.sessions.filter(s => s.studentId === studentId);
+}
+
+function getStudentRecaps(studentId) {
+  return D.recaps.filter(r => (r.studentId || r.sid) === studentId);
+}
+
+function searchStudents(query) {
+  const q = String(query || '').toLowerCase().trim();
+  if (!q) return getVisibleStudents();
+  return getVisibleStudents().filter(s => s.name.toLowerCase().includes(q) || s.subject.toLowerCase().includes(q));
+}
+
+function getStudentPhaseBuckets(students = getVisibleStudents(), recaps = getVisibleRecaps()) {
+  const phases = { accelerating: [], steady: [], intervention: [] };
+  students.forEach(student => {
+    const sRecaps = recaps.filter(r => (r.sid || r.studentId) === student.id).slice(0, 3);
+    const trend = sRecaps.length >= 2 ? (Number(sRecaps[0].rating) - Number(sRecaps[sRecaps.length - 1].rating)) : 0;
+    const avg = sRecaps.length ? sRecaps.reduce((sum, r) => sum + Number(r.rating || 0), 0) / sRecaps.length : Number(student.rating || 0);
+    const latestRecap = sRecaps[0] || null;
+    const item = { student, trend, avg, latestRecap };
+    if (trend >= 1 || avg >= 4.2) phases.accelerating.push(item);
+    else if (trend <= -1 || avg <= 2.8 || student.progress < 55) phases.intervention.push(item);
+    else phases.steady.push(item);
+  });
+  return phases;
+}
+
+function getPhaseNote(item) {
+  const note = item.latestRecap?.notes || '';
+  if (!note) return 'Maintain weekly check-ins and adjust practice difficulty as needed.';
+  const planIndex = note.toLowerCase().indexOf('solution plan:');
+  const raw = planIndex >= 0 ? note.slice(planIndex + 'solution plan:'.length).trim() : note.trim();
+  return raw.length > 90 ? `${raw.slice(0, 90)}...` : raw;
+}
+
+function setPhaseFilter(filterKey) {
+  const allowed = ['all', 'accelerating', 'steady', 'intervention'];
+  if (!allowed.includes(filterKey)) return;
+  D.ui.phaseFilter = filterKey;
+  const phasePages = ['dashboard', 'students', 'recaps', 'progress'];
+  if (phasePages.includes(D.nav)) nav(D.nav);
+}
+
+function renderProgressionPhaseSection(phases, compact = false) {
+  const defs = [
+    { key: 'accelerating', title: 'Accelerating', color: '#2D6A4F', bg: '#E6F4ED' },
+    { key: 'steady', title: 'Steady', color: '#92400E', bg: '#FEF3C7' },
+    { key: 'intervention', title: 'Intervention Plan', color: '#991B1B', bg: '#FEE2E2' },
+  ];
+  const active = D.ui.phaseFilter || 'all';
+  const visibleDefs = active === 'all' ? defs : defs.filter(d => d.key === active);
+  const maxItems = compact ? 2 : 3;
+  const gridCols = compact ? '1fr' : (active === 'all' ? '1fr 1fr 1fr' : '1fr');
+  const filters = [
+    { key: 'all', label: 'All' },
+    { key: 'accelerating', label: 'Accelerating' },
+    { key: 'steady', label: 'Steady' },
+    { key: 'intervention', label: 'Intervention' },
+  ];
+  return `
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Progression Phases</div>
+          <div class="card-sub">Clear grouping by current learning momentum</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          ${filters.map(f => `
+            <button class="btn btn-sm ${active===f.key ? 'btn-primary' : 'btn-outline'}" onclick="setPhaseFilter('${f.key}')" style="${active===f.key ? 'background:var(--navy);border-color:var(--navy)' : ''}">${f.label}</button>
+          `).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:${gridCols};gap:12px">
+          ${visibleDefs.map(def => {
+            const entries = phases[def.key] || [];
+            return `
+              <div style="border:1px solid var(--cream-mid);border-radius:10px;overflow:hidden">
+                <div style="background:${def.bg};color:${def.color};padding:8px 10px;font-size:11px;font-weight:700;letter-spacing:.3px;display:flex;justify-content:space-between">
+                  <span>${def.title}</span><span>${entries.length}</span>
+                </div>
+                <div style="padding:10px;display:flex;flex-direction:column;gap:8px;min-height:${compact ? '120px' : '160px'}">
+                  ${entries.length
+                    ? entries.slice(0, maxItems).map(entry => `
+                      <div style="background:var(--cream);border-radius:8px;padding:8px">
+                        <div style="font-size:12px;font-weight:600;color:var(--ink)">${entry.student.name}</div>
+                        <div style="font-size:10.5px;color:var(--ink-faint)">${entry.student.subject} • ${entry.student.progress}% progress</div>
+                        <div style="font-size:10.5px;color:var(--ink-mid);margin-top:4px">${getPhaseNote(entry)}</div>
+                      </div>
+                    `).join('')
+                    : '<div style="font-size:11px;color:var(--ink-faint);padding-top:6px">No students in this phase.</div>'}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function getUnreadCount() {
+  if (!D.user) return 0;
+  return D.messages.filter(m => !m.read && m.senderId !== D.user.id && getVisibleConversations().some(c => c.id === m.conversationId)).length;
+}
+
+function updateNotificationDot() {
+  const dot = document.querySelector('.notif-dot');
+  if (!dot) return;
+  dot.style.display = getUnreadCount() > 0 ? 'block' : 'none';
+}
+
+function showToast(message) {
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--shadow-lg);font-family:Geist,sans-serif';
+  t.textContent = message;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2500);
+}
+
+function showNotifications() {
+  const unread = getUnreadCount();
+  if (unread > 0) showToast(`${unread} unread message${unread !== 1 ? 's' : ''}`);
+  else showToast('No new notifications');
+}
+
+function handleAddStudent() {
+  showToast('Add Student form is queued for next build.');
+}
+
+function handleStudentFilter() {
+  const order = ['all', 'improving', 'declining'];
+  const idx = order.indexOf(D.ui.studentFilter);
+  D.ui.studentFilter = order[(idx + 1) % order.length];
+  showToast(`Filter: ${D.ui.studentFilter}`);
+  nav('students');
+}
+
+function handleStudentSort() {
+  const order = ['name', 'progress'];
+  const idx = order.indexOf(D.ui.studentSort);
+  D.ui.studentSort = order[(idx + 1) % order.length];
+  showToast(`Sort: ${D.ui.studentSort}`);
+  nav('students');
+}
+
+function handleProfileEdit() {
+  showToast('Profile fields are now editable. Click Save Changes to persist demo values.');
+}
+
+function handleProfileSave() {
+  showToast('Profile changes saved.');
+}
+
+function attachGlobalHandlers() {
+  const searchInput = document.querySelector('.tb-search input');
+  if (searchInput && !searchInput.dataset.bound) {
+    searchInput.addEventListener('input', e => {
+      D.ui.studentSearch = e.target.value;
+      if (D.nav === 'students') nav('students');
+    });
+    searchInput.dataset.bound = '1';
+  }
+}
+
+function isTutor() {
+  return !!D.user && D.user.role === 'Tutor';
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+}
+
+function enhanceKeyboardAccessibility(root = document) {
+  const selectors = ['.auth-tab', '.demo-btn', '.sb-item', '.tb-btn', '.type-chip', '.thread', '.toggle', '.r-btn'];
+  root.querySelectorAll(selectors.join(',')).forEach(el => {
+    const tag = el.tagName.toLowerCase();
+    if (['button', 'a', 'input', 'select', 'textarea'].includes(tag)) return;
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    if (!el.dataset.kbBound) {
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          el.click();
+        }
+      });
+      el.dataset.kbBound = '1';
+    }
+  });
 }
 
 const ICONS = {
   dashboard: `<svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+
   students:  `<svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
   communication: `<svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
   recaps:    `<svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
@@ -606,20 +1107,49 @@ function buildSidebar() {
   const u = D.user;
   document.getElementById('sb-user').innerHTML = `<div class="sb-avatar" style="background:${u.hue}20;color:${u.hue}">${u.ini}</div><div><div class="sb-uname">${u.name}</div><div class="sb-urole">${u.role}</div></div>`;
   document.getElementById('sb-nav').innerHTML = (u.role==='Tutor'?NAV_T:NAV_P).map(n=>`<div class="sb-item" id="nav-${n.id}" onclick="nav('${n.id}')">${ICONS[n.id]||ICONS.settings}<span>${n.l}</span>${n.b?`<span class="sb-badge">${n.b}</span>`:''}</div>`).join('');
+  renderRoleSwitcher();
+  enhanceKeyboardAccessibility();
+}
+
+function switchRole(role) {
+  quickLogin(role === 'Parent' ? 'parent' : 'tutor');
+}
+
+function renderRoleSwitcher() {
+  const box = document.getElementById('role-switcher');
+  if (box) {
+    box.innerHTML = `<div class="sb-section">Demo POV</div>
+    <div class="sb-item ${D.user?.role==='Tutor'?'active':''}" onclick="switchRole('Tutor')"><span>Tutor POV</span></div>
+    <div class="sb-item ${D.user?.role==='Parent'?'active':''}" onclick="switchRole('Parent')"><span>Parent POV</span></div>`;
+  }
+  const mobileBox = document.getElementById('mobile-role-switcher');
+  if (mobileBox) {
+    mobileBox.innerHTML = `<div class="sb-section">Demo POV</div>
+    <div class="sb-item ${D.user?.role==='Tutor'?'active':''}" onclick="switchRole('Tutor')"><span>Tutor POV</span></div>
+    <div class="sb-item ${D.user?.role==='Parent'?'active':''}" onclick="switchRole('Parent')"><span>Parent POV</span></div>`;
+  }
 }
 
 function nav(page, extra) {
   D.nav = page;
+  D.ui.activePage = page;
   document.querySelectorAll('.sb-item').forEach(e=>e.classList.remove('active'));
   const el = document.getElementById('nav-'+page); if(el) el.classList.add('active');
   const TITLES = {dashboard:'Dashboard',students:'Students',recaps:'Recaps',progress:'Progress',schedule:'Schedule',communication:'Communication',settings:'Settings'};
   document.getElementById('topbar-title').textContent = TITLES[page] || page;
   const cp = document.getElementById('cp'), rp = document.getElementById('rp');
   rp.classList.remove('hidden');
-  if(page==='student-profile') { pageStudentProfile(cp,rp,extra); return; }
+  if(page==='student-profile') {
+    pageStudentProfile(cp,rp,extra);
+    closeMobileMenu();
+    enhanceKeyboardAccessibility();
+    return;
+  }
   const pages = {dashboard:pageDashboard,students:pageStudents,recaps:pageRecaps,progress:pageProgress,schedule:pageSchedule,communication:pageCommunication,settings:pageSettings};
   if(pages[page]) pages[page](cp,rp);
   closeMobileMenu();
+  enhanceKeyboardAccessibility();
+  updateNotificationDot();
 }
 
 function toggleMobileMenu() {
@@ -630,6 +1160,7 @@ function toggleMobileMenu() {
     document.getElementById('mobile-menu-nav').innerHTML = (u.role==='Tutor'?NAV_T:NAV_P).map(n=>`<div class="sb-item ${D.nav===n.id?'active':''}" onclick="nav('${n.id}')">${ICONS[n.id]||ICONS.settings}<span>${n.l}</span>${n.b?`<span class="sb-badge">${n.b}</span>`:''}</div>`).join('');
   }
   overlay.classList.toggle('active');
+  enhanceKeyboardAccessibility(document.getElementById('mobile-menu-overlay'));
 }
 function closeMobileMenu() { document.getElementById('mobile-menu-overlay').classList.remove('active'); }
 
@@ -652,54 +1183,70 @@ function pageDashboard(cp,rp) {
     </div>
   `;
 
-  const pendingSessions = D.sessions.filter(s => !s.completed);
+  const visibleStudents = getVisibleStudents();
+  const visibleStudentIds = visibleStudents.map(s => s.id);
+  const pendingSessions = D.sessions.filter(s => !s.completed && visibleStudentIds.includes(s.studentId));
   const pendingCount = pendingSessions.length;
-  const pendingStudents = pendingSessions.map(ps => D.students.find(s => s.id === ps.studentId)).filter(Boolean);
+  const pendingStudents = pendingSessions.map(ps => visibleStudents.find(s => s.id === ps.studentId)).filter(Boolean);
 
-  if(pendingCount > 0) {
-    document.body.classList.add('lock-mode');
-    setTimeout(() => {
-      showModal('recap-modal');
-      const modal = document.getElementById('recap-modal');
-      if(modal) { modal.style.pointerEvents = 'auto'; modal.querySelector('.modal-close')?.remove(); }
-    }, 500);
-  } else {
-    document.body.classList.remove('lock-mode');
-  }
+  const recapsVisible = D.recaps.filter(r => visibleStudentIds.includes(r.sid));
+  const phaseBuckets = getStudentPhaseBuckets(visibleStudents, recapsVisible);
 
-  const totalSessions = D.recaps.length;
-  const avgRating = D.recaps.length > 0 ? (D.recaps.reduce((s,r)=>s+r.rating,0)/D.recaps.length).toFixed(1) : 0;
-  const improvingCount = D.students.filter(s => { const sr=D.recaps.filter(r=>r.sid===s.id).slice(0,3); return sr.length>=2 && sr[0].rating>sr[sr.length-1].rating; }).length;
-  const decliningStudents = D.students.filter(s => { const sr=D.recaps.filter(r=>r.sid===s.id).slice(0,3); return sr.length>=2 && sr[0].rating<sr[sr.length-1].rating; });
-  const systemStatus = decliningStudents.length>0?'At Risk':improvingCount>=D.students.length*0.8?'Healthy':'Stable';
-  const statusColor = systemStatus==='Healthy'?'#10B981':systemStatus==='At Risk'?'#EF4444':'#F59E0B';
+  document.body.classList.remove('lock-mode');
+
+  const totalSessions = recapsVisible.length;
+  const avgRating = recapsVisible.length > 0 ? (recapsVisible.reduce((s,r)=>s+r.rating,0)/recapsVisible.length).toFixed(1) : 0;
+  const improvingCount = visibleStudents.filter(s => { const sr = recapsVisible.filter(r=>r.sid===s.id).slice(0,3); return sr.length>=2 && sr[0].rating>sr[sr.length-1].rating; }).length;
 
   cp.innerHTML = introCard + `
-    <div style="background:linear-gradient(135deg,${statusColor} 0%,${statusColor}CC 100%);border-radius:16px;padding:20px;margin-bottom:18px;color:white">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div><div style="font-size:20px;font-weight:600">SYSTEM STATUS</div><div style="font-size:14px;opacity:.9;margin-top:2px">${systemStatus.toUpperCase()}</div></div><div style="font-size:32px">${systemStatus==='Healthy'?'✅':systemStatus==='At Risk'?'⚠️':'📊'}</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px"><div><strong>Risk:</strong> ${decliningStudents.length} student${decliningStudents.length!==1?'s':''} declining</div><div><strong>Focus:</strong> ${decliningStudents.length>0?decliningStudents[0].name:'All students improving'}</div><div><strong>Action:</strong> ${decliningStudents.length>0?'Increase session frequency':'Maintain current pace'}</div><div><strong>Performance:</strong> ${avgRating}/5 avg rating</div></div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Learning Program Overview</div>
+          <div class="card-sub">Current phase distribution and coaching priorities</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+          <div style="background:#E6F4ED;border:1px solid #A7F3D0;border-radius:10px;padding:10px">
+            <div style="font-size:10px;color:#15803D;text-transform:uppercase;font-weight:700">Accelerating</div>
+            <div style="font-size:20px;font-weight:700;color:#2D6A4F;margin-top:4px">${phaseBuckets.accelerating.length}</div>
+          </div>
+          <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:10px;padding:10px">
+            <div style="font-size:10px;color:#92400E;text-transform:uppercase;font-weight:700">Steady</div>
+            <div style="font-size:20px;font-weight:700;color:#92400E;margin-top:4px">${phaseBuckets.steady.length}</div>
+          </div>
+          <div style="background:#FEE2E2;border:1px solid #FCA5A5;border-radius:10px;padding:10px">
+            <div style="font-size:10px;color:#991B1B;text-transform:uppercase;font-weight:700">Intervention</div>
+            <div style="font-size:20px;font-weight:700;color:#991B1B;margin-top:4px">${phaseBuckets.intervention.length}</div>
+          </div>
+          <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:10px;padding:10px">
+            <div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase;font-weight:700">Open Notes</div>
+            <div style="font-size:20px;font-weight:700;color:var(--ink);margin-top:4px">${pendingCount}</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="sec-hd"><div><div class="sec-title">Control Center</div><div class="sec-sub">System requires ${pendingCount} session record${pendingCount!==1?'s':''}</div></div></div>
-    ${pendingCount>0?`<div style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:16px;padding:20px;margin-bottom:18px;color:white;border:2px solid var(--orange)">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div><div style="font-size:28px;font-weight:600">${pendingCount}</div><div style="font-size:12px;opacity:.9;margin-top:2px">SESSION RECORD${pendingCount!==1?'S':''} REQUIRED</div></div><div style="font-size:48px;opacity:.3">🔒</div></div>
-      <div style="margin-bottom:14px">${pendingStudents.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.2)"><div><div style="font-size:13px;font-weight:500">${s.name}</div><div style="font-size:11px;opacity:.7">${s.subject} • ${s.grade}</div></div><button class="btn" style="background:var(--blue);color:white;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:500" onclick="selectStudentForRecap(${s.id})">Complete Record</button></div>`).join('')}</div>
+    <div class="sec-hd"><div><div class="sec-title">Coaching Queue</div><div class="sec-sub">${pendingCount} session note${pendingCount!==1?'s':''} ready for completion</div></div></div>
+    ${pendingCount>0?`<div class="card" style="margin-bottom:18px">
+      <div class="card-body">${pendingStudents.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--cream)"><div><div style="font-size:13px;font-weight:500;color:var(--ink)">${s.name}</div><div style="font-size:11px;color:var(--ink-faint)">${s.subject} • ${s.grade}</div></div><button class="btn btn-primary btn-sm" onclick="selectStudentForRecap(${s.id})">Complete Notes</button></div>`).join('')}</div>
     </div>`:''}
     <div class="stats-row" style="margin-bottom:16px">
       <div class="stat-card"><div class="stat-label">Sessions This Week</div><div class="stat-val">${totalSessions}</div><div class="stat-tag tt-green">Active</div></div>
       <div class="stat-card"><div class="stat-label">Avg Session Quality</div><div class="stat-val">${avgRating}</div><div class="stat-tag tt-green">Out of 5</div></div>
-      <div class="stat-card"><div class="stat-label">Active Students</div><div class="stat-val">${D.students.length}</div><div class="stat-tag tt-sand">Enrolled</div></div>
+      <div class="stat-card"><div class="stat-label">Active Students</div><div class="stat-val">${visibleStudents.length}</div><div class="stat-tag tt-sand">Enrolled</div></div>
       <div class="stat-card"><div class="stat-label">Improving</div><div class="stat-val">${improvingCount}</div><div class="stat-tag tt-green">↑ Trend</div></div>
     </div>
     <div class="card" style="margin-bottom:12px">
       <div class="card-hd"><div><div class="card-title">Session Records</div><div class="card-sub">Recent completions</div></div><button class="btn btn-outline btn-sm" onclick="nav('recaps')">View All</button></div>
       <div class="card-body">
-        ${D.recaps.slice(0,4).map(r=>{const s=D.students.find(x=>x.id===r.sid);const trend=r.rating>=4?'📈 Strong':r.rating===3?'→ Steady':'📉 Needs focus';return`<div style="padding:12px 0;border-bottom:1px solid var(--cream);display:flex;gap:12px"><div style="width:56px;text-align:center;flex-shrink:0"><div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--ink)">${r.day}</div><div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase;margin-top:2px">${r.mon}</div></div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><div><div style="font-weight:600;color:var(--ink);font-size:13px">${s?.name}</div><div style="font-size:11px;color:var(--ink-faint)">${s?.subject}</div></div><span style="font-size:11px;font-weight:600;color:var(--ink-soft)">${'★'.repeat(r.rating)}</span></div><div style="font-size:12px;color:var(--ink-mid);margin-bottom:4px">${r.topics.split(',')[0]}</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:10px;background:var(--orange-pale);color:var(--orange);padding:3px 8px;border-radius:5px">📚 HW assigned</span><span style="font-size:10px;background:var(--cream);color:var(--ink-soft);padding:3px 8px;border-radius:5px;border:1px solid var(--cream-mid)">${trend}</span></div></div></div>`;}).join('')}
+        ${recapsVisible.slice(0,4).map(r=>{const s=getStudentById(r.sid);const trend=r.rating>=4?'📈 Strong':r.rating===3?'→ Steady':'📉 Needs focus';return`<div style="padding:12px 0;border-bottom:1px solid var(--cream);display:flex;gap:12px"><div style="width:56px;text-align:center;flex-shrink:0"><div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--ink)">${r.day}</div><div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase;margin-top:2px">${r.mon}</div></div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><div><div style="font-weight:600;color:var(--ink);font-size:13px">${s?.name||'Unknown'}</div><div style="font-size:11px;color:var(--ink-faint)">${s?.subject||''}</div></div><span style="font-size:11px;font-weight:600;color:var(--ink-soft)">${'★'.repeat(r.rating)}</span></div><div style="font-size:12px;color:var(--ink-mid);margin-bottom:4px">${r.topics.split(',')[0]}</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:10px;background:var(--orange-pale);color:var(--orange);padding:3px 8px;border-radius:5px">📚 HW assigned</span><span style="font-size:10px;background:var(--cream);color:var(--ink-soft);padding:3px 8px;border-radius:5px;border:1px solid var(--cream-mid)">${trend}</span></div></div></div>`;}).join('')}
       </div>
     </div>
     <div class="card">
       <div class="card-hd"><div><div class="card-title">Student Status</div><div class="card-sub">Performance this term</div></div></div>
       <div class="card-body"><div style="display:flex;flex-direction:column;gap:10px">
-        ${D.students.map(s=>{const st=s.progress>75?{icon:'✓',text:'On track',color:'#2D6A4F'}:s.progress>50?{icon:'→',text:'Steady',color:'var(--orange)'}:{icon:'!',text:'Needs focus',color:'#c0392b'};return`<div style="display:flex;align-items:center;justify-content:space-between;padding:11px;background:var(--cream);border-radius:8px"><div style="display:flex;align-items:center;gap:10px;flex:1"><div style="width:32px;height:32px;border-radius:50%;background:${s.hue}18;color:${s.hue};display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">${s.ini}</div><div><div style="font-weight:500;color:var(--ink);font-size:12px">${s.name}</div><div style="font-size:10px;color:var(--ink-faint)">${s.sessions} sessions • Next: ${s.next}</div></div></div><div style="display:flex;align-items:center;gap:12px"><div style="text-align:right"><div style="font-size:13px;font-weight:600;color:var(--ink)">${s.progress}%</div><div style="font-size:10px;color:var(--ink-faint)">of term goal</div></div><div style="text-align:center"><div style="font-size:16px">${st.icon}</div><div style="font-size:10px;font-weight:500;color:${st.color};margin-top:1px">${st.text}</div></div></div></div>`;}).join('')}
+        ${visibleStudents.map(s=>{const st=s.progress>75?{icon:'✓',text:'On track',color:'#2D6A4F'}:s.progress>50?{icon:'→',text:'Steady',color:'var(--orange)'}:{icon:'!',text:'Needs focus',color:'#c0392b'};return`<div style="display:flex;align-items:center;justify-content:space-between;padding:11px;background:var(--cream);border-radius:8px"><div style="display:flex;align-items:center;gap:10px;flex:1"><div style="width:32px;height:32px;border-radius:50%;background:${s.hue}18;color:${s.hue};display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">${s.ini}</div><div><div style="font-weight:500;color:var(--ink);font-size:12px">${s.name}</div><div style="font-size:10px;color:var(--ink-faint)">${s.sessions} sessions • Next: ${s.next}</div></div></div><div style="display:flex;align-items:center;gap:12px"><div style="text-align:right"><div style="font-size:13px;font-weight:600;color:var(--ink)">${s.progress}%</div><div style="font-size:10px;color:var(--ink-faint)">of term goal</div></div><div style="text-align:center"><div style="font-size:16px">${st.icon}</div><div style="font-size:10px;font-weight:500;color:${st.color};margin-top:1px">${st.text}</div></div></div></div>`;}).join('')}
       </div></div>
     </div>
   `;
@@ -709,15 +1256,27 @@ function pageDashboard(cp,rp) {
       <button class="btn btn-outline" style="width:100%;justify-content:center;margin-bottom:8px" onclick="nav('communication')">Communicate</button>
       <button class="btn btn-outline" style="width:100%;justify-content:center" onclick="nav('schedule')">Schedule</button>
     </div>
-    <div class="rp-section"><div class="rp-label">Status Summary</div>
-      <div style="background:#E6F4ED;border:1px solid #A7F3D0;border-radius:8px;padding:10px;margin-bottom:10px"><div style="font-weight:600;color:#2D6A4F;font-size:12px">✓ ${improvingCount} Students Improving</div><div style="font-size:11px;color:#15803D;margin-top:3px">Positive trend last 3 sessions</div></div>
-      <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px"><div style="font-weight:600;color:var(--ink-mid);font-size:12px">${pendingCount} Recaps Awaiting</div><div style="font-size:11px;color:var(--ink-faint);margin-top:3px">Complete to maintain system</div></div>
+    <div class="rp-section"><div class="rp-label">Phase Summary</div>
+      <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#2D6A4F;font-size:12px">Accelerating: ${phaseBuckets.accelerating.length}</div></div>
+      <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#92400E;font-size:12px">Steady: ${phaseBuckets.steady.length}</div></div>
+      <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px"><div style="font-weight:600;color:#991B1B;font-size:12px">Intervention Plan: ${phaseBuckets.intervention.length}</div><div style="font-size:11px;color:var(--ink-faint);margin-top:3px">${pendingCount} recaps awaiting completion</div></div>
     </div>
   `;
 }
 
 function pageParentDash(cp,rp) {
-  const s=D.students[0], r=D.recaps.find(x=>x.sid===s.id);
+  const visibleStudents = getVisibleStudents();
+  if (!visibleStudents.length) {
+    cp.innerHTML = `<div class="card"><div class="card-body" style="text-align:center;padding:30px;"><div style="font-size:18px;font-weight:600">No students assigned yet</div><div style="font-size:13px;color:var(--ink-soft);margin-top:8px">Please contact your tutor to link your children.</div></div></div>`;
+    rp.innerHTML = '';
+    return;
+  }
+
+  const s = visibleStudents[0];
+  const r = getVisibleRecaps().find(x => x.sid === s.id);
+  const sR = getVisibleRecaps().filter(x => x.sid === s.id);
+  const recentRecaps = sR.slice(0, 3);
+
   cp.innerHTML = `
     <div class="sec-hd"><div><div class="sec-title">Welcome, ${D.user.name.split(' ')[1]}.</div><div class="sec-sub">Tracking progress for ${s.name}</div></div></div>
     <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
@@ -728,12 +1287,19 @@ function pageParentDash(cp,rp) {
     <div class="card">
       <div class="card-hd"><div class="card-title">Latest Session Recap</div><span class="badge b-green">Latest</span></div>
       <div class="card-body"><div class="g3" style="gap:14px">
-        <div><div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:5px">Topics Covered</div><div style="font-size:13.5px;font-weight:500">${r.topics}</div><div style="margin-top:11px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:4px">Performance</div><div style="font-size:16px">${'★'.repeat(r.rating)}</div></div>
+        ${r ? `<div><div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:5px">Topics Covered</div><div style="font-size:13.5px;font-weight:500">${r.topics}</div><div style="margin-top:11px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:4px">Performance</div><div style="font-size:16px">${'★'.repeat(r.rating)}</div></div>
         <div><div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:5px">Homework</div><div class="recap-hw">📚 ${r.hw}</div><div style="margin-top:11px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:4px">Next Plan</div><div style="font-size:12.5px;color:var(--ink-mid)">📌 ${r.next}</div></div>
-        <div><div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:5px">Tutor Notes</div><div style="font-size:12.5px;color:var(--ink-soft);font-style:italic;line-height:1.6">"${r.notes}"</div></div>
+        <div><div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-faint);margin-bottom:5px">Tutor Notes</div><div style="font-size:12.5px;color:var(--ink-soft);font-style:italic;line-height:1.6">"${r.notes}"</div></div>` : '<div style="padding:16px;color:var(--ink-soft);">No recap available yet.</div>'}
+      </div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">Session History</div><div class="card-sub">Past ${recentRecaps.length} sessions</div></div>
+      <div class="card-body"><div style="display:flex;flex-direction:column;gap:10px">
+        ${recentRecaps.length ? recentRecaps.map(r => `<div style="padding:10px;background:var(--cream);border-radius:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:600;color:var(--ink);font-size:13px">${r.day} ${r.mon}</div><div style="font-weight:600;color:var(--orange)">${'★'.repeat(r.rating)}</div></div><div style="font-size:12px;color:var(--ink-mid)">${r.topics.split(',')[0]}</div></div>`).join('') : '<div style="color:var(--ink-soft);text-align:center;padding:16px;">No sessions recorded yet</div>'}
       </div></div>
     </div>
   `;
+
   rp.innerHTML = `
     <div class="rp-section"><div style="text-align:center;margin-bottom:14px"><div class="rp-av" style="background:${s.hue}18;color:${s.hue}">${s.ini}</div><div class="rp-name">${s.name}</div><div class="rp-sub">${s.subject} · ${s.grade}</div></div></div>
     <div class="rp-section"><div class="rp-label">Details</div>
@@ -744,42 +1310,55 @@ function pageParentDash(cp,rp) {
     </div>
     <button class="btn btn-outline" style="width:100%;justify-content:center" onclick="nav('communication')">Communicate</button>
   `;
+  return;
 }
 
 function pageStudents(cp,rp) {
-  const enrichedStudents = D.students.map(s => {
-    const sR=D.recaps.filter(r=>r.sid===s.id), last3=sR.slice(0,3);
-    const trend=last3.length>=2?(last3[0].rating-last3[last3.length-1].rating):0;
-    const status=trend>0?{icon:'📈',label:'Improving',color:'#2D6A4F'}:trend<0?{icon:'📉',label:'Declining',color:'#c0392b'}:{icon:'→',label:'Stable',color:'var(--orange)'};
-    return {...s,status};
+  let visibleStudents = searchStudents(D.ui.studentSearch);
+  const recapsVisible = getVisibleRecaps();
+  let enrichedStudents = visibleStudents.map(s => {
+    const sR = recapsVisible.filter(r => r.sid === s.id).slice(0,3);
+    const trend = sR.length >= 2 ? (sR[0].rating - sR[sR.length-1].rating) : 0;
+    const status = trend > 0 ? {icon:'📈',label:'Improving',color:'#2D6A4F'} : trend < 0 ? {icon:'📉',label:'Declining',color:'#c0392b'} : {icon:'→',label:'Stable',color:'var(--orange)'};
+    return {...s, status};
   });
+  if (D.ui.studentFilter === 'improving') enrichedStudents = enrichedStudents.filter(s => s.status.label === 'Improving');
+  if (D.ui.studentFilter === 'declining') enrichedStudents = enrichedStudents.filter(s => s.status.label === 'Declining');
+  if (D.ui.studentSort === 'progress') enrichedStudents = enrichedStudents.slice().sort((a,b) => b.progress - a.progress);
+  else enrichedStudents = enrichedStudents.slice().sort((a,b) => a.name.localeCompare(b.name));
+
   cp.innerHTML = `
-    <div class="sec-hd"><div><div class="sec-title">Students</div><div class="sec-sub">Your current roster</div></div><button class="btn btn-primary">${iPlus()} Add Student</button></div>
+    <div class="sec-hd"><div><div class="sec-title">Students</div><div class="sec-sub">Your current roster</div></div><button class="btn btn-primary" onclick="handleAddStudent()">${iPlus()} Add Student</button></div>
     <div class="card">
-      <div class="card-hd"><div class="card-title">All Students (${D.students.length})</div><div style="display:flex;gap:7px"><button class="btn btn-outline btn-sm">Filter</button><button class="btn btn-outline btn-sm">Sort</button></div></div>
+      <div class="card-hd"><div class="card-title">All Students (${enrichedStudents.length})</div><div style="display:flex;gap:7px"><button class="btn btn-outline btn-sm" onclick="handleStudentFilter()">Filter: ${D.ui.studentFilter}</button><button class="btn btn-outline btn-sm" onclick="handleStudentSort()">Sort: ${D.ui.studentSort}</button></div></div>
       <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">
         <thead><tr style="background:var(--cream)">${['Student','Subject','Grade','Sessions','Status','Progress','Next Session',''].map(h=>`<th style="padding:9px 18px;text-align:left;font-size:10.5px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.5px">${h}</th>`).join('')}</tr></thead>
         <tbody>${enrichedStudents.map(s=>`<tr style="border-top:1px solid var(--cream);cursor:pointer" onmouseenter="this.style.background='var(--cream)'" onmouseleave="this.style.background=''" onclick="D.profileTab='overview';nav('student-profile',${s.id})"><td style="padding:12px 18px"><div style="display:flex;align-items:center;gap:9px"><div style="width:32px;height:32px;border-radius:50%;background:${s.hue}18;color:${s.hue};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">${s.ini}</div><span style="font-size:13.5px;font-weight:500">${s.name}</span></div></td><td style="padding:12px 18px"><span class="badge b-sand">${s.subject}</span></td><td style="padding:12px 18px;font-size:13px;color:var(--ink-soft)">${s.grade}</td><td style="padding:12px 18px;font-size:13.5px;font-weight:500">${s.sessions}</td><td style="padding:12px 18px"><span style="font-size:11px;font-weight:600;color:${s.status.color}">${s.status.icon} ${s.status.label}</span></td><td style="padding:12px 18px"><div style="display:flex;align-items:center;gap:8px"><div style="height:5px;background:var(--cream-mid);border-radius:3px;overflow:hidden;width:70px"><div style="height:100%;background:${s.progress>75?'#2D6A4F':s.progress>50?'var(--blue)':'#c0392b'};width:${s.progress}%;border-radius:3px"></div></div><span style="font-size:11.5px;font-weight:600;color:var(--ink-soft)">${s.progress}%</span></div></td><td style="padding:12px 18px;font-size:12.5px;color:var(--orange);font-weight:500">${s.next}</td><td style="padding:12px 12px"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();D.profileTab='overview';nav('student-profile',${s.id})">View</button></td></tr>`).join('')}</tbody>
       </table></div>
     </div>
   `;
-  const improving=enrichedStudents.filter(s=>s.status.label==='Improving').length;
-  const declining=enrichedStudents.filter(s=>s.status.label==='Declining').length;
+
+  const improving = enrichedStudents.filter(s => s.status.label==='Improving').length;
+  const phaseBuckets = getStudentPhaseBuckets(visibleStudents, recapsVisible);
+  const avgProgress = visibleStudents.length ? (visibleStudents.reduce((a,b)=>a+b.progress,0)/visibleStudents.length).toFixed(1) : 0;
+
   rp.innerHTML = `<div class="rp-section"><div class="rp-label">Status Summary</div>
-    <div style="background:#E6F4ED;border:1px solid #A7F3D0;border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#2D6A4F;font-size:12px">📈 ${improving} Improving</div><div style="font-size:11px;color:#15803D;margin-top:2px">Positive trend</div></div>
-    ${declining>0?`<div style="background:#FEE2E2;border:1px solid #FECACA;border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#991B1B;font-size:12px">📉 ${declining} Declining</div><div style="font-size:11px;color:#7F1D1D;margin-top:2px">Needs attention</div></div>`:''}
-    <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px"><div style="font-weight:600;color:var(--ink-mid);font-size:12px">📊 Avg Progress</div><div style="font-size:22px;font-weight:700;color:var(--blue);margin-top:4px">${(D.students.reduce((a,b)=>a+b.progress,0)/D.students.length).toFixed(1)}%</div></div>
+    <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#2D6A4F;font-size:12px">Accelerating: ${phaseBuckets.accelerating.length}</div></div>
+    <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#92400E;font-size:12px">Steady: ${phaseBuckets.steady.length}</div></div>
+    <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#991B1B;font-size:12px">Intervention Plan: ${phaseBuckets.intervention.length}</div></div>
+    <div style="background:var(--cream);border:1px solid var(--cream-mid);border-radius:8px;padding:10px"><div style="font-weight:600;color:var(--ink-mid);font-size:12px">📊 Avg Progress</div><div style="font-size:22px;font-weight:700;color:var(--blue);margin-top:4px">${avgProgress}%</div></div>
   </div>`;
 }
 
 function pageStudentProfile(cp,rp,id) {
-  const s=D.students.find(x=>x.id===id); if(!s){nav('students');return;}
+  const s = getStudentById(id);
+  if(!s) { nav('students'); return; }
   document.getElementById('topbar-title').textContent = s.name;
-  const sR=D.recaps.filter(r=>r.sid===s.id);
-  const last3=sR.slice(0,3);
-  const trend=last3.length>=2?(last3[0].rating-last3[last3.length-1].rating):0;
-  const status=trend>0?{icon:'📈',label:'Improving',color:'#2D6A4F'}:trend<0?{icon:'📉',label:'Declining',color:'#c0392b'}:{icon:'→',label:'Stable',color:'var(--orange)'};
-  const progressChange=sR.length>=2?(sR[0].rating*4)-(sR[1].rating*4):0;
+  const sR = getVisibleRecaps().filter(r => r.sid === s.id);
+  const last3 = sR.slice(0,3);
+  const trend = last3.length >= 2 ? (last3[0].rating - last3[last3.length-1].rating) : 0;
+  const status = trend > 0 ? {icon:'📈',label:'Improving',color:'#2D6A4F'} : trend < 0 ? {icon:'📉',label:'Declining',color:'#c0392b'} : {icon:'→',label:'Stable',color:'var(--orange)'};
+  const progressChange = sR.length >= 2 ? (sR[0].rating*4) - (sR[1].rating*4) : 0;
   cp.innerHTML = `
     <div style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:16px;padding:24px;margin-bottom:18px;color:white">
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
@@ -814,93 +1393,340 @@ function pageStudentProfile(cp,rp,id) {
 
 function pageCommunication(cp,rp) {
   rp.classList.add('hidden');
-  const sel = D.selConv || D.convs[0].id;
-  const selectedConv = D.convs.find(c=>c.id===sel);
-  if(selectedConv && selectedConv.unread>0) selectedConv.unread=0;
+  const visibleConvs = getVisibleConversations();
+  const sel = D.ui.activeConversationId || D.selConv || (visibleConvs[0] && visibleConvs[0].id);
+  const selectedConv = visibleConvs.find(c => c.id === sel);
   cp.innerHTML = `
     <div class="sec-hd"><div><div class="sec-title">Communication</div><div class="sec-sub">Student conversations & updates</div></div></div>
     <div class="msg-layout">
       <div class="msg-list">
         <div class="msg-list-hd"><div class="msg-list-title">Conversations</div></div>
-        ${D.convs.map(c=>{const s=D.students.find(x=>x.id===c.sid);return`<div class="thread ${sel===c.id?'active':''}" onclick="D.selConv=${c.id};nav('communication')"><div class="thread-av" style="background:${s?.hue||'#ccc'}18;color:${s?.hue||'#666'}">${s?.ini||'?'}</div><div style="flex:1;min-width:0"><div class="thread-student">${s?.name||''}</div><div class="thread-name">${c.with}</div><div class="thread-preview">${c.last}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0"><div class="thread-time">${c.time}</div>${c.unread?`<div style="background:var(--orange);color:white;font-size:9.5px;font-weight:600;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center">${c.unread}</div>`:''}</div></div>`;}).join('')}
+        ${visibleConvs.map(c=>{
+          const s=getStudentById(c.studentId);
+          const unread = D.messages.filter(m=>m.conversationId===c.id && !m.read && m.senderId !== D.user.id).length;
+          const lastMsg = D.messages.filter(m=>m.conversationId===c.id).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))[0];
+          const partnerName = getConversationPartnerName(c);
+          return`<div class="thread ${sel===c.id?'active':''}" id="thread-${c.id}" onclick="openConversation(${c.id})"><div class="thread-av" style="background:${s?.hue||'#ccc'}18;color:${s?.hue||'#666'}">${s?.ini||'?'}</div><div style="flex:1;min-width:0"><div class="thread-student">${s?.name||''}</div><div class="thread-name">${escapeHTML(partnerName)}</div><div class="thread-preview">${escapeHTML((lastMsg?.content || c.last || '').slice(0,80))}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0"><div class="thread-time">${lastMsg?new Date(lastMsg.createdAt).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}):''}</div>${unread?`<div class="unread-badge" style="background:var(--orange);color:white;font-size:9.5px;font-weight:600;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center">${unread}</div>`:''}</div></div>`;
+        }).join('')}
       </div>
       <div class="msg-main" id="msg-main"></div>
     </div>
   `;
-  renderConv(document.getElementById('msg-main'), sel);
+  if (selectedConv) openConversation(sel);
+  else if (visibleConvs.length === 0) document.getElementById('msg-main').innerHTML = '<div style="padding:18px;color:var(--ink-soft);">No conversations available for your students.</div>';
+}
+
+function openConversation(cid) {
+  D.ui.activeConversationId = cid;
+  D.selConv = cid;
+  D.messages.filter(m => m.conversationId === cid && m.senderId !== D.user.id).forEach(m => { m.read = true; });
+  highlightThread(cid);
+  const thread = document.getElementById(`thread-${cid}`);
+  thread?.querySelector('div[style*="width:16px;height:16px"]')?.remove();
+  renderConv(document.getElementById('msg-main'), cid);
+  updateNotificationDot();
+}
+
+function highlightThread(cid) {
+  document.querySelectorAll('.thread').forEach(t => t.classList.remove('active'));
+  document.getElementById(`thread-${cid}`)?.classList.add('active');
+}
+
+function openScheduleFromConversation() {
+  nav('schedule');
+}
+
+function openRecapFromConversation(studentId) {
+  if (studentId) selectStudentForRecap(studentId);
+  else showModal('recap-modal');
 }
 
 function renderConv(container, cid) {
-  const cv=D.convs.find(c=>c.id===cid), msgs=D.msgs[cid]||[], s=D.students.find(x=>x.id===cv?.sid);
-  const structMsgs=msgs.filter(m=>m.struct), textMsgs=msgs.filter(m=>!m.struct);
+  const cv = D.conversations.find(c => c.id === cid);
+  if (!cv || !canAccessStudent(cv.studentId)) {
+    container.innerHTML = '<div style="padding:18px;color:var(--ink-soft);">Selected conversation is not available.</div>';
+    return;
+  }
+  const msgs = D.messages
+    .filter(m => m.conversationId === cid)
+    .sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  const s = getStudentById(cv.studentId);
+  const partnerName = getConversationPartnerName(cv);
   container.innerHTML = `
     <div class="msg-hd">
       <div style="width:32px;height:32px;border-radius:50%;background:${s?.hue||'#ccc'}18;color:${s?.hue||'#666'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">${s?.ini||'?'}</div>
-      <div><div style="font-size:13.5px;font-weight:500;color:var(--ink)">${cv?.with||''}</div><div style="font-size:11.5px;color:var(--ink-faint)">${s?s.name+' · '+s.subject:''}</div></div>
-      <div style="margin-left:auto;display:flex;gap:6px"><button class="btn btn-sm btn-outline">${ICONS.schedule} Schedule</button><button class="btn btn-sm btn-outline">${ICONS.recaps} Recap</button></div>
+      <div><div style="font-size:13.5px;font-weight:500;color:var(--ink)">${escapeHTML(partnerName)}</div><div style="font-size:11.5px;color:var(--ink-faint)">${s?s.name+' · '+s.subject:''}</div></div>
+      <div style="margin-left:auto;display:flex;gap:6px"><button class="btn btn-sm btn-outline" onclick="openScheduleFromConversation()">${ICONS.schedule} Schedule</button><button class="btn btn-sm btn-outline" onclick="openRecapFromConversation(${cv.studentId})">${ICONS.recaps} Recap</button></div>
     </div>
-    <div class="msg-body" id="mb-${cid}">
-      ${structMsgs.length?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${structMsgs.map(m=>{const ts={recap:{bg:'#F5DDD5',color:'#DF5B30',icon:'📝',label:'Session Summary'},homework:{bg:'#FEF9C3',color:'#854d0e',icon:'📚',label:'Homework'},action:{bg:'#FEE2E2',color:'#991B1B',icon:'⚠️',label:'Action Required'},schedule:{bg:'#E6F4ED',color:'#2D6A4F',icon:'📅',label:'Schedule'}};const st=ts[m.type]||ts.recap;return`<div style="border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);background:var(--white);border:1px solid var(--cream-mid)"><div style="padding:12px 14px;background:${st.bg};color:${st.color};font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between">${st.icon} ${st.label}<span style="font-size:9px">${m.time}</span></div><div style="padding:14px"><div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px">${m.title}</div><div style="font-size:12px;color:var(--ink-mid);line-height:1.6;white-space:pre-line">${m.body}</div></div></div>`;}).join('')}</div>`:''}
-      ${textMsgs.length?`<div style="border-top:1px solid var(--cream-mid);padding-top:12px;margin-top:4px"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-faint);margin-bottom:10px">Chat</div><div style="display:flex;flex-direction:column;gap:8px;max-height:180px;overflow-y:auto">${textMsgs.map(m=>{const sent=m.from==='tutor';return`<div style="display:flex;${sent?'flex-direction:row-reverse':'flex-direction:row'};gap:6px;align-items:flex-end">${!sent?`<div style="width:24px;height:24px;border-radius:50%;background:${s?.hue||'#ccc'}18;color:${s?.hue||'#666'};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;flex-shrink:0">${s?.ini||'?'}</div>`:''}<div><div style="max-width:240px;padding:7px 11px;border-radius:10px;background:${sent?'var(--orange)':'var(--cream)'};color:${sent?'white':'var(--ink-mid)'};font-size:12px;line-height:1.5;${sent?'border-bottom-right-radius:3px':'border-bottom-left-radius:3px'}">${m.text}</div><div style="font-size:10px;color:var(--ink-faint);margin-top:2px;${sent?'text-align:right':''}">${m.time}</div></div></div>`;}).join('')}</div></div>`:''}
-    </div>
+    <div class="msg-body" id="mb-${cid}"></div>
     <div class="msg-composer">
       <div class="type-chips">${['General','Session Summary','Homework','Action Required','Schedule Change'].map((t,i)=>`<div class="type-chip ${i===0?'active':''}" onclick="this.closest('.type-chips').querySelectorAll('.type-chip').forEach(c=>c.classList.remove('active'));this.classList.add('active')">${t}</div>`).join('')}</div>
       <div class="composer-row"><textarea class="composer-input" id="ci-${cid}" placeholder="Type a message…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg(${cid})}"></textarea><button class="btn-send" onclick="sendMsg(${cid})"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
     </div>
   `;
-  const body=document.getElementById('mb-'+cid); if(body) setTimeout(()=>body.scrollTop=body.scrollHeight,40);
+  const body=document.getElementById('mb-'+cid);
+  msgs.forEach(m => body.appendChild(renderMessageElement(m, s)));
+  scrollToBottom(cid);
+  enhanceKeyboardAccessibility(container);
 }
 
-function sendMsg(id) {
-  const inp=document.getElementById('ci-'+id); if(!inp||!inp.value.trim()) return;
-  const cv=D.convs.find(c=>c.id===id);
-  const student=cv?D.students.find(s=>s.name===cv.with):null;
-  if(student && !D.sessions.some(s=>s.studentId===student.id&&s.completed)) { alert('Complete the pending session record first before communicating with '+student.name); return; }
-  const activeChip=document.querySelector('.type-chip.active');
-  const msgType=activeChip?activeChip.textContent:'General';
-  const typeMap={'Session Summary':'recap','Homework':'homework','Action Required':'action','Schedule Change':'schedule'};
-  const type=typeMap[msgType];
-  const titleMap={recap:'SESSION RECAP',homework:'HOMEWORK ASSIGNED',action:'ACTION REQUIRED',schedule:'SCHEDULE CHANGE'};
-  let message;
-  if(!type) { message={id:Date.now(),from:'tutor',text:inp.value.trim(),time:'Just now'}; }
-  else { message={id:Date.now(),from:'tutor',struct:true,type,title:titleMap[type],body:inp.value.trim(),time:'Just now'}; }
-  (D.msgs[id]=D.msgs[id]||[]).push(message);
-  if(cv) cv.unread=0;
-  inp.value='';
-  nav('communication');
+function renderMessageElement(msg, student) {
+  const sent = msg.senderId === D.user.id;
+  const wrap = document.createElement('div');
+  wrap.style.display = 'flex';
+  wrap.style.gap = '6px';
+  wrap.style.alignItems = 'flex-end';
+  wrap.style.flexDirection = sent ? 'row-reverse' : 'row';
+  const isStructured = msg.type !== 'text';
+  if (isStructured) {
+    const meta = { recap:'Session Summary', homework:'Homework', action:'Action Required', schedule:'Schedule' };
+    wrap.innerHTML = `<div style="max-width:360px;border-radius:10px;border:1px solid var(--cream-mid);background:var(--white);overflow:hidden"><div style="padding:7px 10px;background:var(--orange-pale);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase">${meta[msg.type] || 'Update'}</div><div style="padding:10px 12px;font-size:12px;color:var(--ink-mid);white-space:pre-line">${escapeHTML(msg.content)}</div></div>`;
+  } else {
+    wrap.innerHTML = `${!sent?`<div style="width:24px;height:24px;border-radius:50%;background:${student?.hue||'#ccc'}18;color:${student?.hue||'#666'};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;flex-shrink:0">${student?.ini||'?'}</div>`:''}<div><div style="max-width:240px;padding:7px 11px;border-radius:10px;background:${sent?'var(--orange)':'var(--cream)'};color:${sent?'white':'var(--ink-mid)'};font-size:12px;line-height:1.5;${sent?'border-bottom-right-radius:3px':'border-bottom-left-radius:3px'}">${escapeHTML(msg.content)}</div><div style="font-size:10px;color:var(--ink-faint);margin-top:2px;${sent?'text-align:right':''}">${new Date(msg.createdAt).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}</div></div>`;
+  }
+  return wrap;
+}
+
+function appendMessageToDOM(msg) {
+  const container = document.querySelector(`#mb-${msg.conversationId}`);
+  if (!container) return;
+  const conv = D.conversations.find(c => c.id === msg.conversationId);
+  const student = getStudentById(conv?.studentId);
+  container.appendChild(renderMessageElement(msg, student));
+}
+
+function updateThreadMeta(cid) {
+  const thread = document.getElementById(`thread-${cid}`);
+  if (!thread) return;
+  const msgs = D.messages.filter(m => m.conversationId === cid).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  const last = msgs[0];
+  const preview = thread.querySelector('.thread-preview');
+  const timeEl = thread.querySelector('.thread-time');
+  const unread = msgs.filter(m => !m.read && m.senderId !== D.user.id).length;
+  if (preview) preview.textContent = (last?.content || '').slice(0, 80);
+  if (timeEl) timeEl.textContent = last ? new Date(last.createdAt).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}) : '';
+  let badge = thread.querySelector('.unread-badge');
+  if (unread > 0) {
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.className = 'unread-badge';
+      badge.style.cssText = 'background:var(--orange);color:white;font-size:9.5px;font-weight:600;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center';
+      thread.querySelector('div[style*="align-items:flex-end"]')?.appendChild(badge);
+    }
+    badge.textContent = String(unread);
+  } else if (badge) {
+    badge.remove();
+  }
+}
+
+function getConversationTutorId(conversationId) {
+  const conv = D.conversations.find(c => c.id === conversationId);
+  if (!conv) return null;
+  const student = D.students.find(s => s.id === conv.studentId);
+  return student?.tutorId || 201;
+}
+
+function getAutoReplyText(userText, fromRole, toRole, messageType, studentName) {
+  const raw = String(userText || '').trim();
+  const text = raw.toLowerCase();
+  const has = (re) => re.test(text);
+  const normalized = text.replace(/[^\w\s?]/g, '').trim();
+  const wordCount = normalized ? normalized.split(/\s+/).length : 0;
+  const shortMsg = wordCount <= 4;
+
+  const intent = {
+    greeting: has(/\b(hi|hello|hey|yo|good morning|good afternoon|good evening)\b/),
+    thanks: has(/\b(thank you|thanks|thx|appreciate it)\b/),
+    question: raw.includes('?') || has(/\b(can|could|would|should|when|what|why|how|is|are|do|does)\b/),
+    schedule: has(/\b(schedule|reschedule|time|slot|calendar|move|available|availability|tomorrow|today|next week|weekend)\b/),
+    homework: has(/\b(homework|assignment|worksheet|problem set|submit|submitted|due)\b/),
+    recap: has(/\b(recap|summary|session|progress|update)\b/),
+    confirmation: has(/\b(ok|okay|got it|sounds good|understood|perfect)\b/)
+  };
+
+  if (messageType === 'recap') {
+    return fromRole === 'Parent'
+      ? `Thanks for the recap on ${studentName}. We will review it tonight and finish the homework plan.`
+      : `Recap received. I will incorporate this into the next lesson plan for ${studentName}.`;
+  }
+
+  if (messageType === 'homework' || intent.homework) {
+    return fromRole === 'Parent'
+      ? `Understood about homework. We will complete it and send an update before the next session.`
+      : `Thanks for the homework update. I will review it and adjust next class accordingly.`;
+  }
+
+  if (intent.greeting && shortMsg) {
+    return fromRole === 'Parent'
+      ? `Hi! Thanks for messaging. How did today's session with ${studentName} go?`
+      : `Hello! Great to hear from you. I can share today's progress whenever you're ready.`;
+  }
+
+  if (intent.schedule) {
+    return fromRole === 'Parent'
+      ? `Regarding schedule, that can work for us. Please confirm the final time slot.`
+      : `On scheduling, yes I can adjust that. I’ll confirm the updated slot shortly.`;
+  }
+
+  if (intent.recap) {
+    return fromRole === 'Parent'
+      ? `Thanks for the session update. That helps us support ${studentName} at home.`
+      : `Appreciate the update. I’ll use this context in the next tutoring session.`;
+  }
+
+  if (intent.thanks) {
+    return fromRole === 'Parent'
+      ? `You're welcome. Thank you as well for the consistent updates.`
+      : `You're welcome. Happy to help and keep communication clear.`;
+  }
+
+  if (intent.confirmation && shortMsg) {
+    return fromRole === 'Parent'
+      ? `Great, thanks for confirming. We’re aligned on this.`
+      : `Perfect, thanks for confirming. I’ll proceed with that plan.`;
+  }
+
+  if (intent.question) {
+    return fromRole === 'Parent'
+      ? `Good question. Yes, that works for us.`
+      : `Great question. Yes, that approach works and I can proceed.`;
+  }
+
+  if (shortMsg) {
+    return fromRole === 'Parent'
+      ? `Got it. Could you share one more detail so I can respond more precisely?`
+      : `Understood. Please share a bit more detail and I’ll reply specifically.`;
+  }
+
+  return fromRole === 'Parent'
+    ? `Thanks for clarifying. I understood your message and we’ll follow through on it.`
+    : `Thanks for the detailed note. I understood it and will take the next step from here.`;
+}
+
+function scheduleAutoReply(conversationId, sourceMessage) {
+  const conv = D.conversations.find(c => c.id === conversationId);
+  if (!conv || !D.user) return;
+  const tutorId = getConversationTutorId(conversationId);
+  const otherSenderId = D.user.role === 'Tutor' ? conv.parentId : tutorId;
+  const fromRole = D.user.role === 'Tutor' ? 'Parent' : 'Tutor';
+  const toRole = D.user.role;
+  const student = D.students.find(s => s.id === conv.studentId);
+  const replyText = getAutoReplyText(sourceMessage.content, fromRole, toRole, sourceMessage.type, student?.name || 'the student');
+  const delayMs = 700 + Math.floor(Math.random() * 900);
+  setTimeout(() => {
+    const incoming = {
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      conversationId,
+      senderId: otherSenderId,
+      type: 'text',
+      content: replyText,
+      createdAt: new Date().toISOString(),
+      read: D.ui.activeConversationId === conversationId
+    };
+    D.messages.push(incoming);
+    if (D.ui.activeConversationId === conversationId) {
+      appendMessageToDOM(incoming);
+      scrollToBottom(conversationId);
+    }
+    updateThreadMeta(conversationId);
+    updateNotificationDot();
+  }, delayMs);
+}
+
+function scrollToBottom(cid) {
+  const body = document.getElementById(`mb-${cid}`);
+  if (!body) return;
+  requestAnimationFrame(() => { body.scrollTop = body.scrollHeight; });
+}
+
+function sendMsg(id, content, type='text') {
+  const cv = D.conversations.find(c => c.id === id);
+  if (!cv || !canAccessStudent(cv.studentId)) {
+    alert('Unable to send message for this conversation.');
+    return;
+  }
+  const student = getStudentById(cv.studentId);
+  if (student && !D.sessions.some(s => s.studentId === student.id && s.status === 'completed')) {
+    alert('Complete the pending session record first before communicating with '+student.name);
+    return;
+  }
+  const inp = document.getElementById('ci-'+id);
+  const activeChip = inp?.closest('.msg-composer')?.querySelector('.type-chip.active');
+  const msgType = type === 'text' && activeChip ? activeChip.textContent : null;
+  const typeMap = {'Session Summary':'recap','Homework':'homework','Action Required':'action','Schedule Change':'schedule'};
+  const resolvedType = type === 'text' ? (typeMap[msgType] || 'text') : type;
+  const raw = (typeof content === 'string' ? content : (inp?.value || '')).trim();
+  if (!raw) return;
+  const msg = {
+    id: Date.now(),
+    conversationId: id,
+    senderId: D.user.id,
+    type: resolvedType,
+    content: raw,
+    createdAt: new Date().toISOString(),
+    read: true
+  };
+  D.messages.push(msg);
+  if (inp) inp.value = '';
+  appendMessageToDOM(msg);
+  scrollToBottom(id);
+  updateThreadMeta(id);
+  updateNotificationDot();
+  D.ui.activeConversationId = id;
+  if (type === 'text') scheduleAutoReply(id, msg);
 }
 
 function pageRecaps(cp,rp) {
-  const enrichedRecaps=D.recaps.map((r,idx)=>({...r,isPending:idx===0,daysSinceRecap:Math.floor(Math.random()*7)}));
-  const completedToday=enrichedRecaps.filter(r=>r.daysSinceRecap===0).length;
+  const recapsVisible = getVisibleRecaps();
+  const visibleStudents = getVisibleStudents();
+  const canCreateRecap = isTutor();
+  const phaseBuckets = getStudentPhaseBuckets(visibleStudents, recapsVisible);
+  const enrichedRecaps = recapsVisible.map((r,idx)=>{
+    const created = r.createdAt ? new Date(r.createdAt) : new Date(Date.now() - idx * 86400000);
+    const daysSinceRecap = Math.max(0, Math.floor((Date.now() - created.getTime()) / 86400000));
+    return {...r,isPending:idx===0,daysSinceRecap};
+  });
+  const completedToday = enrichedRecaps.filter(r=>r.daysSinceRecap===0).length;
   cp.innerHTML = `
-    <div class="sec-hd"><div><div class="sec-title">Session Recaps</div><div class="sec-sub">Structured records after every session</div></div><button class="btn btn-primary" onclick="showModal('recap-modal')" style="background:var(--orange);font-weight:600;padding:12px">${iPlus()} Complete Session</button></div>
+    <div class="sec-hd"><div><div class="sec-title">Session Recaps</div><div class="sec-sub">Structured records after every session</div></div>${canCreateRecap ? `<button class="btn btn-primary" onclick="showModal('recap-modal')" style="background:var(--orange);font-weight:600;padding:12px">${iPlus()} Complete Session</button>` : ''}</div>
     <div class="g3" style="margin-bottom:12px">
-      <div class="stat-card"><div class="stat-label">Total Recaps</div><div class="stat-val">${D.recaps.length}</div><div class="stat-tag tt-sand">This term</div></div>
-      <div class="stat-card"><div class="stat-label">Avg Rating</div><div class="stat-val">${(D.recaps.reduce((a,r)=>a+r.rating,0)/D.recaps.length).toFixed(1)}</div><div class="stat-tag tt-green">Out of 5</div></div>
+      <div class="stat-card"><div class="stat-label">Total Recaps</div><div class="stat-val">${recapsVisible.length}</div><div class="stat-tag tt-sand">This term</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Rating</div><div class="stat-val">${recapsVisible.length ? (recapsVisible.reduce((a,r)=>a+r.rating,0)/recapsVisible.length).toFixed(1) : '0.0'}</div><div class="stat-tag tt-green">Out of 5</div></div>
       <div class="stat-card"><div class="stat-label">Completed Today</div><div class="stat-val">${completedToday}</div><div class="stat-tag tt-orange">Latest</div></div>
     </div>
+    ${renderProgressionPhaseSection(phaseBuckets)}
     <div class="card">
-      <div class="card-hd"><div class="card-title">All Recaps (${D.recaps.length})</div><select class="fi-sel" style="width:auto;font-size:12.5px;padding:5px 10px"><option>All Students</option>${D.students.map(s=>`<option>${s.name}</option>`).join('')}</select></div>
+      <div class="card-hd"><div class="card-title">All Recaps (${recapsVisible.length})</div><select class="fi-sel" style="width:auto;font-size:12.5px;padding:5px 10px"><option>All Students</option>${visibleStudents.map(s=>`<option>${s.name}</option>`).join('')}</select></div>
       <div class="card-body">
-        ${enrichedRecaps.map((r,idx)=>{const s=D.students.find(x=>x.id===r.sid);const isRecent=r.daysSinceRecap<=1;return`<div style="padding:12px;border:1px solid var(--cream-mid);border-radius:10px;margin-bottom:10px;background:${isRecent?'linear-gradient(135deg,rgba(223,91,48,.05) 0%,rgba(223,91,48,.02) 100%)':'white'}"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div style="display:flex;gap:12px;flex:1"><div style="text-align:center;flex-shrink:0"><div style="font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink)">${r.day}</div><div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase">${r.mon}</div></div><div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="font-weight:600;color:var(--ink);font-size:13px">${s?.name}</div><span class="badge b-sand" style="font-size:10.5px">${s?.subject}</span><span style="color:var(--orange);font-weight:600">${'★'.repeat(r.rating)}</span></div><div style="color:var(--ink-mid);font-size:12px;margin-bottom:4px">${r.topics}</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:10px;background:var(--cream);color:var(--ink-mid);padding:4px 8px;border-radius:5px">📚 ${r.hw}</span><span style="font-size:10px;background:#E6F4ED;color:#2D6A4F;padding:4px 8px;border-radius:5px">✓ Completed</span></div></div></div>${isRecent?`<div style="background:var(--orange);color:white;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;text-transform:uppercase;flex-shrink:0">Latest</div>`:''}</div><div style="background:var(--cream);padding:8px;border-radius:6px;font-size:11.5px;color:var(--ink-mid);font-style:italic;line-height:1.5">"${r.notes}"</div></div>`;}).join('')}
+        ${enrichedRecaps.map((r,idx)=>{const s=getStudentById(r.sid);const isRecent=r.daysSinceRecap<=1;return`<div style="padding:12px;border:1px solid var(--cream-mid);border-radius:10px;margin-bottom:10px;background:${isRecent?'linear-gradient(135deg,rgba(223,91,48,.05) 0%,rgba(223,91,48,.02) 100%)':'white'}"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div style="display:flex;gap:12px;flex:1"><div style="text-align:center;flex-shrink:0"><div style="font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink)">${r.day}</div><div style="font-size:10px;color:var(--ink-faint);text-transform:uppercase">${r.mon}</div></div><div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="font-weight:600;color:var(--ink);font-size:13px">${s?.name||'Unknown'}</div><span class="badge b-sand" style="font-size:10.5px">${s?.subject||''}</span><span style="color:var(--orange);font-weight:600">${'★'.repeat(r.rating)}</span></div><div style="color:var(--ink-mid);font-size:12px;margin-bottom:4px">${r.topics}</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:10px;background:var(--cream);color:var(--ink-mid);padding:4px 8px;border-radius:5px">📚 ${r.hw}</span><span style="font-size:10px;background:#E6F4ED;color:#2D6A4F;padding:4px 8px;border-radius:5px">✓ Completed</span></div></div></div>${isRecent?`<div style="background:var(--orange);color:white;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;text-transform:uppercase;flex-shrink:0">Latest</div>`:''}</div><div style="background:var(--cream);padding:8px;border-radius:6px;font-size:11.5px;color:var(--ink-mid);font-style:italic;line-height:1.5">"${r.notes}"</div></div>`;}).join('')}
       </div>
     </div>
   `;
-  rp.innerHTML = `<div class="rp-section"><div class="rp-label">Stats</div><div class="rp-row"><span class="rp-label-sm">Total</span><span class="rp-val">${D.recaps.length}</span></div><div class="rp-row"><span class="rp-label-sm">Avg Rating</span><span class="rp-val">${(D.recaps.reduce((a,r)=>a+r.rating,0)/D.recaps.length).toFixed(1)}/5</span></div><div class="rp-row"><span class="rp-label-sm">This Month</span><span class="rp-val">5</span></div></div><div class="rp-section"><div class="rp-label">By Student</div>${D.students.map(s=>{const c=D.recaps.filter(r=>r.sid===s.id).length;return`<div class="rp-row"><span class="rp-label-sm">${s.name.split(' ')[0]}</span><span class="rp-val">${c} recaps</span></div>`;}).join('')}</div><div class="rp-section"><button class="btn btn-primary" onclick="showModal('recap-modal')" style="width:100%;justify-content:center;font-weight:600;padding:11px">📝 New Recap</button></div>`;
+  rp.innerHTML = `<div class="rp-section"><div class="rp-label">Stats</div><div class="rp-row"><span class="rp-label-sm">Total</span><span class="rp-val">${recapsVisible.length}</span></div><div class="rp-row"><span class="rp-label-sm">Avg Rating</span><span class="rp-val">${recapsVisible.length ? (recapsVisible.reduce((a,r)=>a+r.rating,0)/recapsVisible.length).toFixed(1) : '0.0'}/5</span></div><div class="rp-row"><span class="rp-label-sm">This Month</span><span class="rp-val">5</span></div></div><div class="rp-section"><div class="rp-label">By Student</div>${visibleStudents.map(s=>{const c=recapsVisible.filter(r=>r.sid===s.id).length;return`<div class="rp-row"><span class="rp-label-sm">${s.name.split(' ')[0]}</span><span class="rp-val">${c} recaps</span></div>`;}).join('')}</div>${canCreateRecap ? `<div class="rp-section"><button class="btn btn-primary" onclick="showModal('recap-modal')" style="width:100%;justify-content:center;font-weight:600;padding:11px">📝 New Recap</button></div>` : ''}`;
 }
 
 function pageProgress(cp,rp) {
-  const studentTrends=D.students.map(s=>{const recaps=D.recaps.filter(r=>r.sid===s.id),last3=recaps.slice(0,3);const trend=last3.length>=2?(last3[0].rating-last3[last3.length-1].rating):0;const avgRating=last3.length?Math.round((last3.reduce((a,r)=>a+r.rating,0)/last3.length)*10)/10:0;return{student:s,trend,avgRating,recaps:last3,status:trend>0?'Improving':trend<0?'Declining':'Stable'};});
-  const improvingCount=studentTrends.filter(t=>t.trend>0).length;
-  const decliningCount=studentTrends.filter(t=>t.trend<0).length;
+  const visibleStudents = getVisibleStudents();
+  const recapsVisible = getVisibleRecaps();
+  const studentTrends = visibleStudents.map(s => {
+    const recaps = recapsVisible.filter(r => r.sid === s.id);
+    const last3 = recaps.slice(0,3);
+    const trend = last3.length >= 2 ? (last3[0].rating - last3[last3.length-1].rating) : 0;
+    const avgRating = last3.length ? Math.round((last3.reduce((a,r)=>a+r.rating,0)/last3.length)*10)/10 : 0;
+    return { student:s, trend, avgRating, recaps:last3, status:trend>0?'Improving':trend<0?'Declining':'Stable' };
+  });
+  const improvingCount = studentTrends.filter(t=>t.trend>0).length;
+  const decliningCount = studentTrends.filter(t=>t.trend<0).length;
+  const stableCount = Math.max(0, visibleStudents.length - improvingCount - decliningCount);
+  const avgSessionQuality = recapsVisible.length ? (recapsVisible.reduce((a,r)=>a+r.rating,0)/recapsVisible.length).toFixed(1) : '0.0';
+  const phaseBuckets = getStudentPhaseBuckets(visibleStudents, recapsVisible);
   cp.innerHTML = `
     <div class="sec-hd"><div><div class="sec-title">Student Performance</div><div class="sec-sub">Actionable insights on progress & trends</div></div></div>
     <div class="stats-row" style="margin-bottom:18px">
       <div class="stat-card"><div class="stat-label">Improving</div><div class="stat-val">${improvingCount}</div><div class="stat-tag tt-green">Last 3 sessions ↑</div></div>
-      <div class="stat-card"><div class="stat-label">Stable</div><div class="stat-val">${D.students.length-improvingCount-decliningCount}</div><div class="stat-tag tt-sand">Consistent</div></div>
+      <div class="stat-card"><div class="stat-label">Stable</div><div class="stat-val">${stableCount}</div><div class="stat-tag tt-sand">Consistent</div></div>
       <div class="stat-card"><div class="stat-label">Declining</div><div class="stat-val">${decliningCount}</div><div class="stat-tag tt-amber">Needs attention ↓</div></div>
-      <div class="stat-card"><div class="stat-label">Avg Session Quality</div><div class="stat-val">${(D.recaps.reduce((a,r)=>a+r.rating,0)/D.recaps.length).toFixed(1)}</div><div class="stat-tag tt-green">Out of 5</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Session Quality</div><div class="stat-val">${avgSessionQuality}</div><div class="stat-tag tt-green">Out of 5</div></div>
     </div>
     <div class="card" style="margin-bottom:12px">
       <div class="card-hd"><div class="card-title">Individual Performance Trends</div><div class="card-sub">Last 3 sessions — Shows who needs support</div></div>
@@ -914,28 +1740,67 @@ function pageProgress(cp,rp) {
     </div>
     <div class="card"><div class="card-hd"><div class="card-title">Individual Progress Comparison</div></div><div class="card-body"><div style="height:240px"><canvas id="pg3"></canvas></div></div></div>
   `;
-  setTimeout(()=>{
+  requestAnimationFrame(()=>{
     const months=['Sep','Oct','Nov','Dec','Jan','Feb','Mar'],ticks={color:'#9E9890',font:{family:'Geist',size:11}};
     new Chart(document.getElementById('pg2').getContext('2d'),{type:'bar',data:{labels:months,datasets:[{data:[20,24,22,18,28,30,32],backgroundColor:'rgba(223,91,48,.12)',borderColor:'#DF5B30',borderWidth:2,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(0,0,0,.05)'},ticks},x:{grid:{display:false},ticks}}}});
     new Chart(document.getElementById('pg4').getContext('2d'),{type:'line',data:{labels:months,datasets:[{label:'Avg Rating',data:[3.8,3.9,4.0,3.7,4.0,4.1,4.1],borderColor:'#2D6A4F',backgroundColor:'rgba(45,106,79,.08)',tension:.4,fill:true,pointBackgroundColor:'#2D6A4F',pointRadius:4,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{font:{family:'Geist',size:11},color:'#6B6560'}}},scales:{y:{min:3,max:5,grid:{color:'rgba(0,0,0,.05)'},ticks},x:{grid:{display:false},ticks}}}});
-    new Chart(document.getElementById('pg3').getContext('2d'),{type:'line',data:{labels:months,datasets:D.students.map((s,i)=>({label:s.name.split(' ')[0],data:months.map((_,j)=>j===6?s.progress:Math.max(20,s.progress-((6-j)*6)+i*2)),borderColor:s.hue,backgroundColor:'transparent',tension:.4,pointBackgroundColor:s.hue,pointRadius:2.5,borderWidth:2}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{family:'Geist',size:11},color:'#6B6560',padding:12}}},scales:{y:{min:0,max:100,grid:{color:'rgba(0,0,0,.05)'},ticks},x:{grid:{display:false},ticks}}}});
-  },50);
-  rp.innerHTML = `<div class="rp-section"><div class="rp-label">Quick Alerts</div>${decliningCount>0?`<div style="background:#FEE2E2;border:1px solid #FECACA;border-radius:8px;padding:10px;margin-bottom:8px"><div style="font-weight:600;color:#991B1B;font-size:12px">⚠️ ${decliningCount} Declining</div><div style="font-size:11px;color:#7F1D1D;margin-top:3px">Downward trend</div></div>`:''}</div><div class="rp-section"><div class="rp-label">Student Progress</div>${D.students.map(s=>`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;font-weight:500;color:var(--ink-mid)">${s.name.split(' ')[0]}</span><span style="font-size:12px;font-weight:600;color:${s.progress>75?'#2D6A4F':'var(--blue)'}">${s.progress}%</span></div><div style="height:5px;background:var(--cream-mid);border-radius:3px;overflow:hidden"><div style="height:100%;width:${s.progress}%;background:${s.hue};border-radius:3px"></div></div></div>`).join('')}</div>`;
+    new Chart(document.getElementById('pg3').getContext('2d'),{type:'line',data:{labels:months,datasets:visibleStudents.map((s,i)=>({label:s.name.split(' ')[0],data:months.map((_,j)=>j===6?s.progress:Math.max(20,s.progress-((6-j)*6)+i*2)),borderColor:s.hue,backgroundColor:'transparent',tension:.4,pointBackgroundColor:s.hue,pointRadius:2.5,borderWidth:2}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{family:'Geist',size:11},color:'#6B6560',padding:12}}},scales:{y:{min:0,max:100,grid:{color:'rgba(0,0,0,.05)'},ticks},x:{grid:{display:false},ticks}}}});
+  });
+  rp.innerHTML = `${renderProgressionPhaseSection(phaseBuckets, true)}<div class="rp-section"><div class="rp-label">Student Progress</div>${visibleStudents.map(s=>`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;font-weight:500;color:var(--ink-mid)">${s.name.split(' ')[0]}</span><span style="font-size:12px;font-weight:600;color:${s.progress>75?'#2D6A4F':'var(--blue)'}">${s.progress}%</span></div><div style="height:5px;background:var(--cream-mid);border-radius:3px;overflow:hidden"><div style="height:100%;width:${s.progress}%;background:${s.hue};border-radius:3px"></div></div></div>`).join('')}</div>`;
+}
+
+function getWeekDates(offset) {
+  const now = new Date();
+  const day = now.getDay();
+  const mondayOffset = day === 0 ? -6 : 1 - day;
+  const start = new Date(now);
+  start.setDate(now.getDate() + mondayOffset + offset * 7);
+  return [...Array(7)].map((_,i)=>{
+    const d = new Date(start);
+    d.setDate(start.getDate()+i);
+    return d;
+  });
+}
+
+function createSession(data) {
+  D.sessions.push({
+    id: Date.now(),
+    ...data,
+    status: 'scheduled',
+    completed: false
+  });
+  if (D.nav === 'schedule') nav('schedule');
+}
+
+function changeWeek(delta) {
+  D.ui.currentWeekOffset += delta;
+  nav('schedule');
 }
 
 function pageSchedule(cp,rp) {
-  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],nums=[17,18,19,20,21,22,23];
+  const canManageScheduleRequests = isTutor();
+  const weekDates = getWeekDates(D.ui.currentWeekOffset);
+  const weekStart = weekDates[0];
+  const weekEnd = weekDates[6];
+  const visibleStudents = getVisibleStudents();
+  const studentIds = new Set(visibleStudents.map(s => s.id));
+  const sessions = D.sessions.filter(s => {
+    if (!studentIds.has(s.studentId)) return false;
+    const d = new Date(`${s.date}T00:00:00`);
+    return d >= new Date(weekStart.toDateString()) && d <= new Date(weekEnd.toDateString());
+  });
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   cp.innerHTML = `
-    <div class="sec-hd"><div><div class="sec-title">Schedule</div><div class="sec-sub">Week of March 17–23, 2025</div></div>
-      <div style="display:flex;gap:7px"><button class="btn btn-outline btn-sm">← Prev</button><button class="btn btn-outline btn-sm">Today</button><button class="btn btn-outline btn-sm">Next →</button><button class="btn btn-primary btn-sm" onclick="showModal('sched-modal')">${iPlus()} Request Change</button></div>
+    <div class="sec-hd"><div><div class="sec-title">Schedule</div><div class="sec-sub">Week of ${weekStart.toLocaleDateString()} – ${weekEnd.toLocaleDateString()}</div></div>
+      <div style="display:flex;gap:7px"><button class="btn btn-outline btn-sm" onclick="changeWeek(-1)">← Prev</button><button class="btn btn-outline btn-sm" onclick="D.ui.currentWeekOffset=0;nav('schedule')">Today</button><button class="btn btn-outline btn-sm" onclick="changeWeek(1)">Next →</button><button class="btn btn-primary btn-sm" onclick="showModal('sched-modal')">${iPlus()} Request Change</button></div>
     </div>
-    <div class="card" style="margin-bottom:12px"><div class="sched-grid">${days.map((d,i)=>{const evs=D.schedule.filter(e=>e.day===i);return`<div class="sched-day"><div class="sched-day-hd"><div class="sched-dn">${d}</div><div class="sched-num ${i===4?'today':''}">${nums[i]}</div></div><div class="sched-slots">${evs.map(e=>`<div class="sched-ev ${e.cls}"><div>${e.name}</div><div style="opacity:.75;font-weight:400">${e.time}</div></div>`).join('')}</div></div>`;}).join('')}</div></div>
+    <div class="card" style="margin-bottom:12px"><div class="sched-grid">${weekDates.map((date,i)=>{const dateKey=date.toISOString().split('T')[0];const evs=sessions.filter(e=>e.date===dateKey);return`<div class="sched-day"><div class="sched-day-hd"><div class="sched-dn">${days[i]}</div><div class="sched-num">${date.getDate()}</div></div><div class="sched-slots">${evs.length?evs.map(e=>{const st=visibleStudents.find(s=>s.id===e.studentId);return`<div class="sched-ev ${e.status==='completed'?'ev-green':'ev-orange'}"><div>${st?.name?.split(' ')[0]||'Student'}</div><div style="opacity:.75;font-weight:400">${e.time}</div></div>`;}).join(''):`<div style="font-size:10px;color:var(--ink-faint)">No sessions</div>`}</div></div>`;}).join('')}</div></div>
     <div class="card">
       <div class="card-hd"><div class="card-title">Schedule Change Requests</div><span class="badge b-amber">${D.schedReqs.filter(r=>r.status==='pending').length} Pending</span></div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--cream)">${['Student','Current','Requested','Reason','Status','Actions'].map(h=>`<th style="padding:8px 18px;text-align:left;font-size:10.5px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.5px">${h}</th>`).join('')}</tr></thead><tbody>${D.schedReqs.map((r,index)=>`<tr style="border-top:1px solid var(--cream)"><td style="padding:11px 18px;font-size:13px;font-weight:500">${r.student}</td><td style="padding:11px 18px;font-size:12.5px;color:var(--ink-soft)">${r.from}</td><td style="padding:11px 18px;font-size:12.5px;color:var(--orange);font-weight:500">${r.to}</td><td style="padding:11px 18px;font-size:12.5px;color:var(--ink-faint)">${r.reason}</td><td style="padding:11px 18px"><span class="badge ${r.status==='pending'?'b-amber':'b-green'}">${r.status}</span></td><td style="padding:11px 18px">${r.status==='pending'?`<div style="display:flex;gap:5px"><button class="btn btn-sm btn-success" onclick="approveScheduleRequest(${index})">Approve</button><button class="btn btn-sm" style="background:#FEE2E2;color:#991B1B;border:none;border-radius:7px;cursor:pointer;font-size:11.5px;font-family:Geist,sans-serif;padding:5px 10px" onclick="declineScheduleRequest(${index})">Decline</button></div>`:'-'}</td></tr>`).join('')}</tbody></table></div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--cream)">${['Student','Current','Requested','Reason','Status','Actions'].map(h=>`<th style="padding:8px 18px;text-align:left;font-size:10.5px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.5px">${h}</th>`).join('')}</tr></thead><tbody>${D.schedReqs.map((r,index)=>`<tr style="border-top:1px solid var(--cream)"><td style="padding:11px 18px;font-size:13px;font-weight:500">${r.student}</td><td style="padding:11px 18px;font-size:12.5px;color:var(--ink-soft)">${r.from}</td><td style="padding:11px 18px;font-size:12.5px;color:var(--orange);font-weight:500">${r.to}</td><td style="padding:11px 18px;font-size:12.5px;color:var(--ink-faint)">${r.reason}</td><td style="padding:11px 18px"><span class="badge ${r.status==='pending'?'b-amber':'b-green'}">${r.status}</span></td><td style="padding:11px 18px">${r.status==='pending' && canManageScheduleRequests?`<div style="display:flex;gap:5px"><button class="btn btn-sm btn-success" onclick="approveScheduleRequest(${index})">Approve</button><button class="btn btn-sm" style="background:#FEE2E2;color:#991B1B;border:none;border-radius:7px;cursor:pointer;font-size:11.5px;font-family:Geist,sans-serif;padding:5px 10px" onclick="declineScheduleRequest(${index})">Decline</button></div>`:'-'}</td></tr>`).join('')}</tbody></table></div>
     </div>
   `;
-  rp.innerHTML = `<div class="rp-section"><div class="rp-label">This Week</div>${D.schedule.map(e=>`<div class="rp-row"><span class="rp-label-sm">${e.name}</span><span style="font-size:11.5px;color:var(--orange);font-weight:500">${e.time}</span></div>`).join('')}</div><button class="btn btn-outline" style="width:100%;justify-content:center" onclick="showModal('sched-modal')">${iPlus()} Request Change</button>`;
+  rp.innerHTML = `<div class="rp-section"><div class="rp-label">This Week</div>${sessions.map(e=>{const st=visibleStudents.find(s=>s.id===e.studentId);return`<div class="rp-row"><span class="rp-label-sm">${st?.name||'Student'}</span><span style="font-size:11.5px;color:var(--orange);font-weight:500">${e.time}</span></div>`;}).join('') || '<div class="empty">No sessions this week</div>'}</div><button class="btn btn-outline" style="width:100%;justify-content:center" onclick="showModal('sched-modal')">${iPlus()} Request Change</button>`;
 }
 
 function pageSettings(cp,rp) {
@@ -946,9 +1811,9 @@ function pageSettings(cp,rp) {
       <div class="card" style="margin-bottom:12px">
         <div class="card-hd"><div class="card-title">Profile</div></div>
         <div class="card-body">
-          <div style="display:flex;align-items:center;gap:13px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--cream)"><div style="width:52px;height:52px;border-radius:50%;background:${D.user?.hue||'#DF5B30'}18;color:${D.user?.hue||'#DF5B30'};display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600">${D.user?.ini||'U'}</div><div><div style="font-family:'Instrument Serif',serif;font-size:17px">${D.user?.name||'User'}</div><div style="font-size:12px;color:var(--ink-faint)">${D.user?.role} · james.chen@school.edu</div></div><button class="btn btn-outline btn-sm" style="margin-left:auto">Edit</button></div>
+          <div style="display:flex;align-items:center;gap:13px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--cream)"><div style="width:52px;height:52px;border-radius:50%;background:${D.user?.hue||'#DF5B30'}18;color:${D.user?.hue||'#DF5B30'};display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600">${D.user?.ini||'U'}</div><div><div style="font-family:'Instrument Serif',serif;font-size:17px">${D.user?.name||'User'}</div><div style="font-size:12px;color:var(--ink-faint)">${D.user?.role} · james.chen@school.edu</div></div><button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="handleProfileEdit()">Edit</button></div>
           <div class="form-grid"><div class="ff"><label>Full Name</label><input class="fi" value="${D.user?.name||''}"></div><div class="ff"><label>Email</label><input class="fi" value="james.chen@school.edu"></div><div class="ff"><label>School</label><input class="fi" value="Tokyo International School"></div><div class="ff"><label>Subjects</label><input class="fi" value="Mathematics, Physics"></div></div>
-          <button class="btn btn-primary btn-sm">Save Changes</button>
+          <button class="btn btn-primary btn-sm" onclick="handleProfileSave()">Save Changes</button>
         </div>
       </div>
       <div class="card" style="margin-bottom:12px">
@@ -964,8 +1829,9 @@ function pageSettings(cp,rp) {
 }
 
 function buildRecapModal() {
+  const visibleStudents = getVisibleStudents();
   document.getElementById('recap-modal-body').innerHTML = `
-    <div class="form-grid"><div class="ff"><label>Student</label><select class="fi-sel">${D.students.map(s=>`<option>${s.name}</option>`).join('')}</select></div><div class="ff"><label>Date</label><input class="fi" type="date" value="${new Date().toISOString().split('T')[0]}"></div></div>
+    <div class="form-grid"><div class="ff"><label>Student</label><select class="fi-sel">${visibleStudents.map(s=>`<option>${s.name}</option>`).join('')}</select></div><div class="ff"><label>Date</label><input class="fi" type="date" value="${new Date().toISOString().split('T')[0]}"></div></div>
     <div class="ff"><label>Topics Covered</label><textarea class="fi fi-ta" placeholder="e.g. Quadratic equations, factoring methods…"></textarea></div>
     <div class="ff"><label>Performance Rating</label><div class="r-btns">${['😞 Poor','😐 Fair','🙂 Good','😊 Great','🌟 Excellent'].map(l=>`<div class="r-btn" onclick="this.closest('.r-btns').querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${l}</div>`).join('')}</div></div>
     <div class="ff"><label>Homework Assigned</label><textarea class="fi" style="height:56px" placeholder="List homework for the student…"></textarea></div>
@@ -973,9 +1839,25 @@ function buildRecapModal() {
     <div class="ff"><label>Notes (Optional)</label><textarea class="fi fi-ta" placeholder="Private observations…"></textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:4px"><button class="btn btn-outline" onclick="closeModal('recap-modal')">Cancel</button><button class="btn btn-success" onclick="submitRecap()">✓ Save Recap</button></div>
   `;
+  enhanceKeyboardAccessibility(document.getElementById('recap-modal-body'));
+}
+
+function buildTutorSolutionNote(student, rating, topics) {
+  const topicLabel = topics.split(',')[0].trim() || 'today\'s topic';
+  if (rating <= 2) {
+    return `Intervention needed on ${topicLabel}. Solution plan: break tasks into 10-minute chunks, use worked examples, and run 2 targeted check-ins before next session.`;
+  }
+  if (rating === 3) {
+    return `Performance is steady in ${topicLabel}. Solution plan: maintain practice cadence, add one retrieval quiz mid-week, and close with an error-correction reflection.`;
+  }
+  if (rating === 4) {
+    return `Strong progress in ${topicLabel}. Solution plan: add mixed-difficulty practice and one application problem to lock in transfer.`;
+  }
+  return `Excellent mastery in ${topicLabel}. Solution plan: introduce extension challenges and peer-teach summary to deepen retention.`;
 }
 
 function submitRecap() {
+  if (!isTutor()) { alert('Only tutors can submit session recaps.'); return; }
   const body=document.getElementById('recap-modal-body');
   const studentSelect=body.querySelector('select');
   const dateInput=body.querySelector('input[type="date"]:first-of-type');
@@ -985,25 +1867,44 @@ function submitRecap() {
   const nextPlanInput=document.getElementById('next-plan-input');
   const notesTextarea=body.querySelector('textarea:last-of-type');
   if(!studentSelect||!dateInput||!topicsTextarea||!ratingBtn||!homeworkTextarea){alert('Please fill in all required fields');return;}
+  const selectedDate = dateInput.value;
+  const parsedDate = new Date(selectedDate);
+  const topics = topicsTextarea.value.trim();
+  const homework = homeworkTextarea.value.trim();
+  if (!selectedDate || Number.isNaN(parsedDate.getTime()) || !topics || !homework) { alert('Please fill in all required fields with valid values.'); return; }
   const ratingText=ratingBtn.textContent;
   const rating=ratingText.includes('Poor')?1:ratingText.includes('Fair')?2:ratingText.includes('Good')?3:ratingText.includes('Great')?4:5;
-  const student=D.students.find(s=>s.name===studentSelect.value);
-  if(!student){alert('Student not found');return;}
-  const newRecap={id:Date.now(),sid:student.id,day:new Date(dateInput.value).getDate().toString(),mon:new Date(dateInput.value).toLocaleDateString('en-US',{month:'short'}).toUpperCase(),topics:topicsTextarea.value,rating,hw:homeworkTextarea.value,next:nextPlanInput?.value||'Continue current plan',notes:notesTextarea?.value||'No additional notes'};
+  const visibleStudents = getVisibleStudents();
+  const student = visibleStudents.find(s=>s.name===studentSelect.value);
+  if(!student){alert('Student not found or not accessible');return;}
+  const session = D.sessions.find(s => s.studentId === student.id && s.date === selectedDate) || null;
+  const manualNotes = notesTextarea?.value.trim() || '';
+  const autoSolution = buildTutorSolutionNote(student, rating, topics);
+  const finalNotes = manualNotes ? `${manualNotes} Solution plan: ${autoSolution}` : autoSolution;
+  const newRecap={id:Date.now(),sid:student.id,studentId:student.id,sessionId:session?.id || null,day:parsedDate.getDate().toString(),mon:parsedDate.toLocaleDateString('en-US',{month:'short'}).toUpperCase(),topics:escapeHTML(topics),rating,hw:escapeHTML(homework),next:escapeHTML(nextPlanInput?.value.trim()||'Continue current plan'),notes:escapeHTML(finalNotes),createdAt:new Date().toISOString()};
   const studentRecaps=D.recaps.filter(r=>r.sid===student.id);
   const progressChange=studentRecaps.length>=1?Math.round((rating/5)*8):5;
   student.progress=Math.min(100,student.progress+progressChange);
   student.sessions=(student.sessions||0)+1;
-  student.rating=studentRecaps.length>0?(studentRecaps.reduce((sum,r)=>sum+r.rating,0)/studentRecaps.length).toFixed(1):rating;
+  const allRatings = [...studentRecaps.map(r => Number(r.rating) || 0), rating];
+  student.rating = Number((allRatings.reduce((sum, r) => sum + r, 0) / allRatings.length).toFixed(1));
   D.recaps.unshift(newRecap);
-  const pendingSession=D.sessions.find(s=>s.studentId===student.id&&s.date===dateInput.value&&!s.completed);
-  if(pendingSession) pendingSession.completed=true;
-  closeModal('recap-modal');
+  const pendingSession=D.sessions.find(s=>s.studentId===student.id&&s.date===selectedDate&&s.status!=='completed');
+  if(pendingSession) { pendingSession.completed=true; pendingSession.status='completed'; }
+  const visibleStudentIds = visibleStudents.map(s => s.id);
+  const hasPending = D.sessions.some(s => !s.completed && visibleStudentIds.includes(s.studentId));
+  if (!hasPending) document.body.classList.remove('lock-mode');
+  closeModal('recap-modal', true);
   const t=document.createElement('div');
   t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--navy);color:var(--cream);padding:14px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:6px;font-family:Geist,sans-serif;max-width:280px';
   t.innerHTML=`<div style="display:flex;align-items:center;gap:7px"><span style="color:#10B981;font-size:16px">✓</span><span>Session completed for ${student.name}</span></div>${progressChange>0?`<div style="font-size:12px;color:#60A5FA;margin-left:23px">Progress +${progressChange}% (${student.progress}% total)</div>`:''}`;
   document.body.appendChild(t); setTimeout(()=>t.remove(),4000);
-  setTimeout(()=>nav('dashboard'),500);
+  const conv = D.conversations.find(c => c.studentId === student.id);
+  if (conv) {
+    const recapText = `Topics: ${topics}\nRating: ${'★'.repeat(rating)}\nHomework: ${homework}\nTutor solution plan: ${autoSolution}`;
+    sendMsg(conv.id, recapText, 'recap');
+  }
+  requestAnimationFrame(()=>nav('dashboard'));
 }
 
 function submitScheduleRequest() {
@@ -1011,7 +1912,11 @@ function submitScheduleRequest() {
   const sel=modal.querySelector('select');
   const dates=modal.querySelectorAll('input[type="date"]');
   const reason=modal.querySelector('textarea');
-  D.schedReqs.push({student:sel.value,from:dates[0]?.value||'TBD',to:dates[1]?.value||'TBD',status:'pending',reason:reason?.value||''});
+  D.schedReqs.push({student:escapeHTML(sel.value),from:escapeHTML(dates[0]?.value||'TBD'),to:escapeHTML(dates[1]?.value||'TBD'),status:'pending',reason:escapeHTML(reason?.value?.trim()||'')});
+  const student = D.students.find(s => s.name === sel.value);
+  if (student && dates[1]?.value) {
+    createSession({ studentId: student.id, tutorId: student.tutorId, date: dates[1].value, time: '16:00' });
+  }
   closeModal('sched-modal');
   const t=document.createElement('div');
   t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:7px;font-family:Geist,sans-serif';
@@ -1021,11 +1926,15 @@ function submitScheduleRequest() {
 }
 
 function approveScheduleRequest(index) {
+  if (!isTutor()) { alert('Only tutors can approve requests.'); return; }
+  if (!D.schedReqs[index]) return;
   D.schedReqs[index].status='approved'; nav(D.nav);
   const t=document.createElement('div'); t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:7px;font-family:Geist,sans-serif';
   t.innerHTML='<span style="color:#86efac">✓</span> Approved.'; document.body.appendChild(t); setTimeout(()=>t.remove(),3000);
 }
 function declineScheduleRequest(index) {
+  if (!isTutor()) { alert('Only tutors can decline requests.'); return; }
+  if (!D.schedReqs[index]) return;
   D.schedReqs[index].status='declined'; nav(D.nav);
   const t=document.createElement('div'); t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:7px;font-family:Geist,sans-serif';
   t.innerHTML='<span style="color:#dc2626">✗</span> Declined.'; document.body.appendChild(t); setTimeout(()=>t.remove(),3000);
@@ -1033,22 +1942,44 @@ function declineScheduleRequest(index) {
 
 function selectStudentForRecap(studentId) {
   showModal('recap-modal');
-  setTimeout(()=>{const sel=document.querySelector('#recap-modal-body select');const s=D.students.find(x=>x.id===studentId);if(sel&&s)sel.value=s.name;},100);
+  requestAnimationFrame(()=>{const sel=document.querySelector('#recap-modal-body select');const s=getStudentById(studentId);if(sel&&s)sel.value=s.name;});
+}
+
+function refreshScheduleModalStudents() {
+  const modal = document.getElementById('sched-modal');
+  const select = modal?.querySelector('select');
+  if (!select) return;
+  const students = getVisibleStudents();
+  select.innerHTML = students.length ? students.map(s => `<option>${escapeHTML(s.name)}</option>`).join('') : '<option>No students available</option>';
 }
 
 function showModal(id) {
   const el=document.getElementById(id); if(!el) return;
+  if (id === 'recap-modal' && !isTutor()) { alert('Only tutors can create recaps.'); return; }
   el.classList.add('open');
   if(id==='recap-modal') { buildRecapModal(); }
+  if(id==='sched-modal') { refreshScheduleModalStudents(); }
   if(id==='recap-modal' && document.body.classList.contains('lock-mode')) {
     const closeBtn=el.querySelector('.modal-close'), cancelBtn=el.querySelector('.btn-outline');
     if(closeBtn) closeBtn.style.display='none';
     if(cancelBtn) cancelBtn.style.display='none';
   }
 }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+function closeModal(id, force = false) {
+  if (id === 'recap-modal' && document.body.classList.contains('lock-mode') && !force) return;
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{
+  if (e.target !== o) return;
+  if (o.id === 'recap-modal' && document.body.classList.contains('lock-mode')) return;
+  o.classList.remove('open');
+}));
 function iPlus() { return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`; }
+bootstrapDataModel();
+initAuth();
+initApp();
+enhanceKeyboardAccessibility();
+bindAuthInputKeys();
 </script>
 </body>
 </html>
